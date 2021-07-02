@@ -39,6 +39,8 @@ style.use("dark_background")
 
 import numpy as np
 
+from datetime import datetime
+from pathlib import Path
 
 # GUI FILE
 from app_modules import *
@@ -59,6 +61,8 @@ class MainWindow(QMainWindow):
         print('System: ' + platform.system())
         print('Version: ' + platform.release())
 
+        self.diretorio = [os.getcwd()]
+
         self.signal = MySignal()
         self.signal.sig_with_str.connect(self.print_console_log)
         self.signal.sig_start_acq.connect(self.set_startButton)
@@ -74,8 +78,7 @@ class MainWindow(QMainWindow):
         self.timerFlag = 0
         
         
-
-        self.USBhandler = USBFunctions(self.signal.sig_with_str, self.signal.sig_start_acq, self.signal.sig_dataPlot, self.x)
+        self.USBhandler = USBFunctions(self.diretorio, self.signal.sig_with_str, self.signal.sig_start_acq, self.signal.sig_dataPlot, self.x)
         self.BThandler = BTFunctions(self.signal.sig_with_str, self.signal.sig_start_acq, self.x)
 
         
@@ -130,7 +133,7 @@ class MainWindow(QMainWindow):
         ## ==> END ##
 
         ## USER ICON ==> SHOW HIDE
-        UIFunctions.userIcon(self, "GH", "", True)
+        UIFunctions.userIcon(self, "GD", "", True)
         ## ==> END ##
 
         self.configOn = 0
@@ -147,6 +150,7 @@ class MainWindow(QMainWindow):
         self.ui.button_start_acq.clicked.connect(lambda: self.USBhandler.startUSBacquisiton())
         #self.ui.button_start_acq.clicked.connect(lambda: self.BThandler.startBTacquisiton())
         
+        self.ui.button_chooseFolder.clicked.connect(lambda: self.chooseFolder())
 
         ##CONNECTING TRIGGER BUTTON CALLBACK
         self.ui.button_trigger.clicked.connect(lambda: self.saveTrigger())
@@ -306,7 +310,25 @@ class MainWindow(QMainWindow):
     def saveTrigger(self):
         tempo = self.time.toString('hh:mm:ss')
         tempo = tempo.split(':')
+
+        self.trigger_path = self.diretorio[0] + '/' + 'Triggers.txt'
+
+        with open(self.trigger_path, "a+") as f:
+            f.write(str(60*int(tempo[1]) + int(tempo[2])) + '\n')
+        pass
+
+
         print(60*int(tempo[1]) + int(tempo[2]))
+
+    def chooseFolder(self):
+        self.diretorio[0] = QtWidgets.QFileDialog.getExistingDirectory(None, 'Select a folder:', 'C:\\', QtWidgets.QFileDialog.ShowDirsOnly)
+        
+        if self.diretorio[0] == '':
+            self.diretorio[0] = os.getcwd()
+            self.diretorio[0] = self.diretorio[0].replace('\\','/')
+
+        self.ui.lineEd_chooseFolder.setText(self.diretorio[0])
+
 
     def Button(self):
         # GET BT CLICKED

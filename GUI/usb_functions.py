@@ -3,20 +3,12 @@ import serial.tools.list_ports
 import time
 from threading import Thread
 
-logs_path = r'C:\Users\GiacomoAD\Desktop\PythonEnv\GUI\Logs' + "\\"
-
-string_T = time.ctime()                     #   Creating file name
-string_T = string_T.replace(" ", "_")       #based on server starting 
-string_T = string_T.replace(":", "-")       #date and current time
-
-file_path = logs_path + string_T + r'.csv'
-
-with open(file_path, "a+") as f:
-    f.write('')
-    pass
+from datetime import datetime
+from pathlib import Path
 
 class USBFunctions():
-    def __init__(self, console_signal, start_signal, plot_signal, vetor):
+    def __init__(self, folder_path, console_signal, start_signal, plot_signal, vetor):
+       self.pathFolder = folder_path
        self.signal = console_signal
        self.signal2 = start_signal
        self.plotSignal = plot_signal
@@ -57,6 +49,16 @@ class USBFunctions():
         print('Sending > byte')
         self.signal.emit('\n'+ 'Sent START SIGNAL to main device')
         self.ser.write(b'>')
+
+        timestamp = str(datetime.today())
+        timestamp = timestamp[:-10].replace(' ', '_')
+        timestamp = timestamp.replace(':','-')
+        
+        self.pathFolder[0] = self.pathFolder[0] + "/" + timestamp
+        Path(self.pathFolder[0]).mkdir(parents=True, exist_ok=True)
+        
+        #Path(file_path + "/my/directory").mkdir(parents=True, exist_ok=True)
+
         time.sleep(0.5)
         self.threadAlive = True
         self.readingThread = Thread(target=self.keepReading, args=(self.signal,))
@@ -123,6 +125,12 @@ class USBFunctions():
 
     def threadedWriteFile(self):
         last_line = 0
+        string_T = time.ctime()                     #   Creating file name
+        string_T = string_T.replace(" ", "_")       #based on server starting 
+        string_T = string_T.replace(":", "-")       #date and current time
+
+        file_path = self.pathFolder[0] + '/' + string_T + r'.csv'
+
 
         with open(file_path, "a+") as f:
             while True:
