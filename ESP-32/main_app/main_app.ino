@@ -1,174 +1,147 @@
-#include <DroneTimer.h>
+/* ***************************************************************** */
+/* File name:        main_app.ino                                    */
+/* File description: SR-NIRS sensor main app                         */
+/* Author name:      Giacomo Dollevedo                               */
+/* Creation date:    30Jun2021                                       */
+/* Revision date:    14Jul2021                                       */
+/* ***************************************************************** */
+
 #include <Adafruit_ADS1X15.h>
-#include <arduinoFFT.h>
-#include <Wire.h> 
-#include <LiquidCrystal_I2C.h>
-#include <NIRSFilter.h>
+#include <Wire.h>
 #include "BluetoothSerial.h"
-#include <GainMux.h>
 
-#define ADC0 (36)
+#include <DroneTimer.h>
+#include <NIRSFilter.h>
+#include <SRsensor.h>
+
+/*SET DEBUG TO 1 TO ENABLE SERIAL MONITOR PRINTS*/
 #define DEBUG 0
-#define LEDR (26)
-#define LEDIR (14)
-#define S0 (32)
-#define S1 (25)
-#define S2 (27)
+
+/*SET CALIBRATION TO 1 TO ENABLE AUTO-GAIN CHANGE*/
+#define CALIBRATION 1
 #define N_GAIN 8
+#define MEANVAL 1
+#define N_DET 3
 
-#define DET_PIN (23)
-#define S1_DET (18)
-
+/*DATA ACQUISITION FREQUENCY*/
 #define FREQUENCY 50
+
+/*BLUETOOTH MESSAGE PACKET*/
 #define MAX_SIZE 16384
 #define PACKET_SIZE 150
 
-#define CONSTY 0.8819
-#define CONSTU 0.1181
+/*IMPORTED CLASSES OBJECTS*/
+DroneTimer timer;       // ESP-32 timer
+SRSensor NIRSsensor;
+BluetoothSerial ESP_BT; // Bluetooth comm
 
-#define FFT_ON 0
-#define CALIBRACAO 1
-
-
-DroneTimer timer;
-NIRSFilter filtroIR;
-NIRSFilter filtroR;
-
-GainMux mux;
-
-arduinoFFT FFT = arduinoFFT();
-LiquidCrystal_I2C lcd(0x27, 16, 2);
-BluetoothSerial ESP_BT;
-
-
-/************** FFT DECLARATIONS *************/
-const uint16_t samples = 256; //This value MUST ALWAYS be a power of 2
-const double samplingFrequency = FREQUENCY;
-//unsigned int timerFrequency = 2*FREQUENCY;
-/*
-These are the input and output vectors
-Input vectors receive computed results from FFT
-*/  
-double vReal[samples];
-double vImag[samples];
-int i = 0;
-//unsigned char flagFFT = FFT_ON;
-/********** END OF FFT DECLARATIONS *********/
-
-
-/************ TIMER DECLARATIONS ***********/
+/************ TIMER VARIABLES ***********/
 volatile unsigned char timer_flag = 0;
-volatile unsigned char timer_count = 0;
-volatile unsigned char troca = 0;
 
-int leitura1 = 0;
-float leitura1_filtrada = 0;
-float leitura2_filtrada = 0;
-int leitura2 = 0;
-int leitura3 = 0;
-int leitura4 = 0;
-int leitura5 = 0;
-int leitura6 = 0;
+double initTime = 0.0; // Initial time
+double cTime = 0.0;    // Current time
+/******** END OF TIMER VARIABLES ********/
 
-double tempo_zero = 0;
-double tempo = 0;
+/************ SENSOR READ VARIABLES ************/
 
-unsigned char estado = 0;
-/********** END TIMER DECLARATIONS *********/
+unsigned char sensorState = 0;
 
+/******** END OF SENSOR READ VARIALES *********/
 
-Adafruit_ADS1115 ads;
+/************** SELF GAIN CHANGE VARIABLES *************/
+unsigned char flagCalibrate = CALIBRATION;
 
-/************** SELF GAIN CHANGE *************/
-
-unsigned char flagCalibrate = CALIBRACAO;
 int meanVal[N_GAIN];
 int compare[N_GAIN];
 int nRead = 0;
-unsigned char currentChannel = 0;
 int compara = 0;
+unsigned char currentChannel = 0;
+unsigned char cDet = 0;
+/********** END OF SELF GAIN VARIABLES *********/
 
-/********** END OF SELF GAIN CHANGE *********/
+/************** MEAN VALUE VARIABLES *************/
 
-/************** BLUETOOTH CONN *************/
+int means[N_DET][N_GAIN];
+unsigned char currCh = 0;
+unsigned char currGain = 0;
+unsigned char flagMeans = MEANVAL;
 
-unsigned char start_flag = 0;
-char bufferIn[256] = {'\0'};
+/************** END OF MEAN VALUE VARIABLES *************/
 
-char *message_packet = (char *)calloc(MAX_SIZE, sizeof(char));
 
-unsigned char packet_ready = 0;
-int packets = 0;
+/************** BLUETOOTH CONN VARIABLES *************/
+int packets = 0; //
 
-uint8_t address1[6] = {0x98, 0xD3, 0x31, 0xF9, 0x87, 0x94}; // 98D3:31:F98794
-char *pin = "1234";
-unsigned char conectado = 0;
+char *pin = "1234"; // Bluetooth connection security PIN
 
-/********** END OF BLUETOOTH CONN **********/
+char bufferIn[256] = {'\0'};    // Incoming bluetooth message buffer
+unsigned char start_flag = 0;   // System start flag
+unsigned char packet_ready = 0; // Flag for ready to send packets
+unsigned char connected_flag = 0;
+uint8_t address1[6] = {0x98, 0xD3, 0x31, 0xF9, 0x87, 0x94};    // 98D3:31:F98794
+char *message_packet = (char *)calloc(MAX_SIZE, sizeof(char)); // Outgoing bluetooth message buffer
 
+/********** END OF BLUETOOTH CONN VARIABLES **********/
 
 /*Timer interruption routine*/
 void IRAM_ATTR timerInterrupt()
 {
-    
-    timer_flag = 1;
 
-    //timer_count++;
-
+  timer_flag = 1;
 }
 
-void setup() {
+void setup()
+{
 
-    for(int i=0;i<N_GAIN;i++){
-      meanVal[i] = 0;
-      compare[i] = 0;
-    }
-  
+  /* Initializing variables */
+  for (int i = 0; i < N_GAIN; i++)
+  {
+    meanVal[i] = 0;
+    compare[i] = 0;
+    means[0][i] = 0;
+    means[1][i] = 0;
+    means[2][i] = 0;
+  }
+
+  if (DEBUG)
+  {
     Serial.begin(115200);
-    delay(500);
-    Wire.setClock(400000);
-    lcd.init();
-    lcd.backlight();
+  }
 
-    lcd.setCursor(0, 0);
-    lcd.print("ESP32 - Testando");
-    lcd.setCursor(0, 1);
-    lcd.print("BPM: ");
-    
-    ads.begin();
-    timer.initTimer(6*FREQUENCY, &timerInterrupt);
+  NIRSsensor.initSensor();
 
-    ESP_BT.begin("ESP32", true); //name of Bluetooth
-    ESP_BT.setPin(pin);
-    conectado = ESP_BT.connect(address1);
-    
-    if(conectado) {
+  /* Setting up timer frequency and interruption routine */
+  timer.initTimer(6 * FREQUENCY, &timerInterrupt);
+
+  /* Setting up Bluetooth Connection*/
+  ESP_BT.begin("ESP32", true);               //name of Bluetooth Device
+  ESP_BT.setPin(pin);                        // Setting security PIN
+  connected_flag = ESP_BT.connect(address1); // Connecting to specific address
+
+  if (connected_flag)
+  {
+    if (DEBUG)
       Serial.println("Connected Succesfully!");
-    } 
-    else {
-      while(!ESP_BT.connected(10000)) {
-        Serial.println("Failed to connect. Make sure remote device is available and in range, then restart app."); 
-      }
+  }
+
+  else
+  {
+    while (!ESP_BT.connected(10000))
+    {
+      if (DEBUG)
+        Serial.println("Failed to connect. Make sure remote device is available and in range, then restart app.");
     }
+  }
 
-    if(DEBUG){
-      Serial.println("Setup OK!");  
-    }
-    
-    pinMode(ADC0, INPUT);
-    pinMode(LEDR, OUTPUT);
-    pinMode(LEDIR, OUTPUT);
+  if (DEBUG)
+  {
+    Serial.println("Setup OK!");
+  }
 
-    pinMode(DET_PIN, OUTPUT);
-    pinMode(S1_DET, OUTPUT);
+  Wire.setClock(400000); // Setting I2C clock speed to 400 kHz
 
-    
 
-    mux.initMux(S0,S1,S2);
-
-    mux.changeGain(4);
-   
-    while(start_flag == 0){
+  while(start_flag == 0){
       if(ESP_BT.available()){
         ESP_BT.readBytesUntil('>', bufferIn, 255);
         start_flag = 1;
@@ -176,197 +149,152 @@ void setup() {
       yield();
     }
 
-    Wire.setClock(400000);
-    digitalWrite(LEDIR, HIGH);
-    digitalWrite(DET_PIN, LOW);
-    digitalWrite(S1_DET, LOW);
-    mux.changeGain(0);
-    ads.readADC_Differential_0_1();
-    timer.enableTimer();
-    tempo_zero = double(millis())/1000;
+  NIRSsensor.switchIR();
+  timer.enableTimer();   // Enabling timer interruptions
 
-    
-    
-}
 
-void loop() {
+  /**/
+  while(flagMeans)
+    findMean();
 
-  if(timer_flag){
-    timer_flag = 0;
+  /* AUTO GAIN CONTROL*/
+  while (flagCalibrate)
+    calibrate();
 
-    if(flagCalibrate == 1){
-      meanVal[currentChannel] += ads.readADC_SingleEnded(0);
-      nRead++;
-      //Serial.println(nRead);
-
-      if(nRead == 500){
-        meanVal[currentChannel] = meanVal[currentChannel]/nRead;
-        //Serial.println(meanVal[currentChannel]);
-        currentChannel++;
-        nRead = 0;
-
-        mux.changeGain(currentChannel);
-
-        if(currentChannel == N_GAIN){
-          while(nRead < N_GAIN){
-              compare[nRead] = meanVal[nRead] - 15000;
-              //Serial.println(compare[nRead]);
-              nRead++;
-          }
-
-          nRead = 0;
-          currentChannel = 0;
-
-          while(nRead < N_GAIN){
-            if(nRead == 0){
-              compara = compare[nRead];
-              currentChannel = nRead;
-              nRead++;
-            }
-
-            else{
-              //Compara atual com o maior anterior
-              // Se menor (distancia ate o 0 menor), troca
-              if(abs(compare[nRead]) < abs(compara)){
-                compara = compare[nRead];
-                currentChannel = nRead;
-              }
-              nRead++;
-            }
-          }
-
-          mux.changeGain(currentChannel);
-          
-          flagCalibrate = 0;
-          //Serial.println(currentChannel);
-          tempo_zero = double(millis())/1000;
-        }
-      }
-      
-      
+  for(int j=0;j<N_DET;j++){
+    for(int i=0;i<N_GAIN;i++){
+      sprintf(message_packet, "%s%d;\0", message_packet, means[j][i]);
     }
-
-    if(flagCalibrate == 0 && estado == 0){
-
-      digitalWrite(DET_PIN, LOW);
-      digitalWrite(S1_DET, LOW);
-      
-      digitalWrite(LEDR, LOW);
-      digitalWrite(LEDIR, HIGH);
-      
-      tempo = double(millis()) / 1000 - tempo_zero;
-      leitura1 = ads.readADC_SingleEnded(0);
-      //leitura1_filtrada = (filtroIR.filter(leitura1));
-      
-      /*if(i < samples){
-        vReal[i] = double(leitura1);
-        vImag[i] = 0;
-        i++;
-      }*/
-      
-      estado++;
-    }
-    
-    else if(flagCalibrate == 0 && estado == 1){
-      digitalWrite(LEDR, HIGH);
-      digitalWrite(LEDIR, LOW);
-      
-      leitura2 = ads.readADC_SingleEnded(0);
-      //leitura2_filtrada = filtroR.filter(leitura2);
-
-      estado++;
-      mux.changeGain(0);
-      
-    }
-
-    else if(flagCalibrate == 0 && estado == 2){
-      digitalWrite(DET_PIN, HIGH);
-      digitalWrite(LEDR, LOW);
-      digitalWrite(LEDIR, HIGH);
-      
-      leitura3 = ads.readADC_SingleEnded(0);
-
-      estado++;
-      
-    }
-
-    else if(flagCalibrate == 0 && estado == 3){
-      digitalWrite(LEDR, HIGH);
-      digitalWrite(LEDIR, LOW);
-
-      leitura4 = ads.readADC_SingleEnded(0);
-
-      estado++;
-      
-    }
-
-    else if(flagCalibrate == 0 && estado == 4){
-      digitalWrite(DET_PIN, LOW);
-      digitalWrite(S1_DET, HIGH);
-      digitalWrite(LEDR, LOW);
-      digitalWrite(LEDIR, HIGH);
-      
-      leitura5 = ads.readADC_SingleEnded(0);
-
-      estado++;
-      
-    }
-
-    else if(flagCalibrate == 0 && estado == 5){
-      digitalWrite(LEDR, HIGH);
-      digitalWrite(LEDIR, LOW);
-      estado = 0;
-      
-      leitura6 = ads.readADC_SingleEnded(0);
-      
-      mux.changeGain(currentChannel);
-      
-      sprintf(message_packet, "%s%.2f;%d;%d;%d;%d;%d;%d;%d;%d\n\0", message_packet, tempo, leitura1, leitura2, leitura3, leitura4,leitura5,leitura6,currentChannel,0);
-      packets++;
-      
-
-      if(packets == PACKET_SIZE){
-        packet_ready = 1;
-        packets = 0;
-      }
-      
-    }
-   
+    sprintf(message_packet, "%s\n\0", message_packet);
   }
 
+  ESP_BT.printf("%d;%d;%d\n\0", NIRSsensor.chGains[0], NIRSsensor.chGains[1], NIRSsensor.chGains[2]);
+  ESP_BT.printf("%s", message_packet);
+  message_packet[0] = '\0';
+
+  initTime = initTime = double(millis()) / 1000;
+   
+}
+
+void loop()
+{
+  /* RUNS AT TIMER FREQUENCY*/
+  if (timer_flag)
+  {
+    timer_flag = 0;
+
+    if(sensorState == 0){
+      cTime = getTimestamp();
+    }
+    
+    NIRSsensor.readState(sensorState);
+    sensorState++;
+    
+  }
+
+  if(sensorState == 6){
+    sensorState = 0;
+    /*Writing to Bluetooth outgoing buffer*/
+    sprintf(message_packet, "%s%.2f;%d;%d;%d;%d;%d;%d\n\0", message_packet, cTime, NIRSsensor.channelReadingsIR[0], NIRSsensor.channelReadingsR[0],
+      NIRSsensor.channelReadingsIR[1], NIRSsensor.channelReadingsR[1], NIRSsensor.channelReadingsIR[2], NIRSsensor.channelReadingsR[2]);
+
+    packets++; // adding to # of lines on packet
+
+    /* If the packet ready to send */
+    if(packets == PACKET_SIZE){
+      packet_ready = 1; // Flipping flag to send packets
+      packets = 0;      // Resetting # of lines written
+    }
+  }
+
+  /* If the packet ready to send */
   if(packet_ready){
-    packet_ready = 0;
-    ESP_BT.printf("%s", message_packet);
+    packet_ready = 0; // Resetting flag
+    ESP_BT.printf("%s", message_packet);  // Sending outgoing buffer through Bluetooth
     message_packet[0] = '\0';
   }
 
-  /*DESCOMENTAR PARA TESTE DE GANHOS*/
-  /*if(timer_count == 150){
-    timer_count = 0;
-    troca++;
-    mux.changeGain(troca);
-    if(troca == 7){
-      troca = -1;
-    }
-  }*/
+  
+}
 
-  if(i == samples && FFT_ON){
-    FFT.Windowing(vReal, samples, FFT_WIN_TYP_HAMMING, FFT_FORWARD);
-    FFT.Compute(vReal, vImag, samples, FFT_FORWARD); /* Compute FFT */
-    //Serial.println("FFT COMPUTADA");
-    FFT.ComplexToMagnitude(vReal, vImag, samples); /* Compute magnitudes */
-    //Serial.println("MAGNITUDE COMPUTADA");
-    double x = FFT.MajorPeak(vReal, samples, samplingFrequency);
-    //Serial.print("MAIOR PICO: ");
-    //Serial.println(x, 6);
-    x = x*60;
-    if(x < 300 && x > 35){
-      lcd.setCursor(5, 1);
-      lcd.print("   ");
-      lcd.setCursor(5, 1);
-      lcd.print(int(x));
-      i = 0;
+void findMean(){
+  if(timer_flag){
+    timer_flag = 0;
+
+    means[currCh][currGain] += NIRSsensor.readSensor();
+    nRead++;
+
+    if(nRead == 500){
+      means[currCh][currGain] = means[currCh][currGain]/nRead;
+      currGain++;
+      
+      
+      if(currGain==N_GAIN){
+        currGain = 0;
+        currCh++;
+        
+      }
+
+      else{
+        NIRSsensor.changeGain(currGain);
+      }
+  
+      if(currCh == N_DET){
+        flagMeans = 0;
+        nRead = 0;
+        NIRSsensor.changeGain(0);
+        NIRSsensor.changeCh(0);
+      }
+
+      else{
+        NIRSsensor.changeCh(currCh);
+        nRead = 0;
+      }
+      
+    }
+    
+  }
+}
+
+void calibrate(){
+
+  int testComp[N_DET][N_GAIN];
+
+  unsigned char currGain = 0;
+  int lastValue = 0;
+
+  for(int i=0;i<N_DET;i++){
+    for(int j=0;j<N_GAIN;j++){
+      testComp[i][j] = means[i][j] - 15000;
     }
   }
+
+  for(int i=0;i<N_DET;i++){
+    currGain = 0;
+    lastValue = 0;
+    for(int j=0;j<N_GAIN;j++){
+      
+      if(j == 0){
+        lastValue = testComp[i][j];
+        currGain = j;
+      }
+
+      else{
+        if (abs(testComp[i][j]) < abs(lastValue)){
+          lastValue = testComp[i][j];
+          currGain = j;
+        }        
+      }
+    }
+    
+    NIRSsensor.changeDetGain(currGain, i);
+    
+  }
   
+  flagCalibrate = 0;
+  
+}
+
+double getTimestamp(){
+  return double(millis()) / 1000 - initTime;
 }
