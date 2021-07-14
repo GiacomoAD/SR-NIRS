@@ -1,9 +1,9 @@
 /* ***************************************************************** */
 /* File name:        Sensor.h                                        */
-/* File description: Sensor Base Class header file              	 */
+/* File description: Sensor Base Class header file                   */
 /* Author name:      Giacomo Dollevedo                               */
 /* Creation date:    07Jul2021                                       */
-/* Revision date:    09Jul2021                                       */
+/* Revision date:    14Jul2021                                       */
 /* ***************************************************************** */
  
 #ifndef Sensor_h
@@ -87,6 +87,30 @@ void changeDetGain(unsigned char gain, unsigned char det);
 /*                                                                                      */
 /* ************************************************************************************ */
 int readSensor();
+
+
+/* ************************************************************************************ */
+/* Method's name:          switchR                                                      */ 
+/* Description:            Turn Red LED on                                              */
+/*                                                                                      */
+/* Entry parameters:       n/a                                                          */
+/*                                                                                      */
+/* Return parameters:      n/a                                                          */
+/*                                                                                      */
+/* ************************************************************************************ */  
+void switchR();
+
+
+/* ************************************************************************************ */
+/* Method's name:          switchIR                                                     */ 
+/* Description:            Turn Infrared LED on                                         */
+/*                                                                                      */
+/* Entry parameters:       n/a                                                          */
+/*                                                                                      */
+/* Return parameters:      n/a                                                          */
+/*                                                                                      */
+/* ************************************************************************************ */  
+void switchIR();
 
 private:
 

@@ -3,7 +3,7 @@
 /* File description: Sensor Base Class header file                   */
 /* Author name:      Giacomo Dollevedo                               */
 /* Creation date:    07Jul2021                                       */
-/* Revision date:    09Jul2021                                       */
+/* Revision date:    14Jul2021                                       */
 /* ***************************************************************** */
 
 #include "SRSensor.h"
@@ -186,4 +186,31 @@ int SRSensor::readSensor(){
 
   return ads.readADC_SingleEnded(0);
 
+}
+
+/* ************************************************************************************ */
+/* Method's name:          switchR                                                      */ 
+/* Description:            Turn Red LED on                                              */
+/*                                                                                      */
+/* Entry parameters:       n/a                                                          */
+/*                                                                                      */
+/* Return parameters:      n/a                                                          */
+/*                                                                                      */
+/* ************************************************************************************ */  
+void SRSensor::switchR(){
+    return ledMux.switchR();
+}
+
+
+/* ************************************************************************************ */
+/* Method's name:          switchIR                                                     */ 
+/* Description:            Turn Infrared LED on                                         */
+/*                                                                                      */
+/* Entry parameters:       n/a                                                          */
+/*                                                                                      */
+/* Return parameters:      n/a                                                          */
+/*                                                                                      */
+/* ************************************************************************************ */  
+void SRSensor::switchIR(){
+    return ledMux.switchIR();
 }
