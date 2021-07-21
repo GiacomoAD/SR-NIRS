@@ -4,10 +4,6 @@
 ## PROJECT MADE WITH: Qt Designer and PySide2
 ## V: 1.0.0
 ##
-## This project can be used freely for all uses, as long as they maintain the
-## respective credits only in the Python scripts, any information in the visual
-## interface (GUI) can be modified without any implication.
-##
 ## There are limitations on Qt licenses if you want to use your products
 ## commercially, I recommend reading them on the official website:
 ## https://doc.qt.io/qtforpython/licenses.html
@@ -342,7 +338,7 @@ class MainWindow(QMainWindow):
             UIFunctions.labelPage(self, "Home")
             btnWidget.setStyleSheet(UIFunctions.selectMenu(btnWidget.styleSheet()))
 
-        # PAGE NEW USER
+        # PAGE CONNECTIONS
         if btnWidget.objectName() == "btn_conn_screen":
             self.ui.stackedWidget.setCurrentWidget(self.ui.page_conn)
             UIFunctions.resetStyle(self, "btn_conn_screen")
@@ -354,13 +350,6 @@ class MainWindow(QMainWindow):
             self.ui.stackedWidget.setCurrentWidget(self.ui.page_graph)
             UIFunctions.resetStyle(self, "btn_graph_screen")
             UIFunctions.labelPage(self, "Monitor")
-            btnWidget.setStyleSheet(UIFunctions.selectMenu(btnWidget.styleSheet()))
-
-        # PAGE WIDGETS
-        if btnWidget.objectName() == "btn_widgets":
-            self.ui.stackedWidget.setCurrentWidget(self.ui.page_widgets)
-            UIFunctions.resetStyle(self, "btn_widgets")
-            UIFunctions.labelPage(self, "Custom Widgets")
             btnWidget.setStyleSheet(UIFunctions.selectMenu(btnWidget.styleSheet()))
 
     ## ==> END ##
@@ -380,29 +369,8 @@ class MainWindow(QMainWindow):
     ########################################################################
     def mousePressEvent(self, event):
         self.dragPos = event.globalPos()
-        if event.buttons() == Qt.LeftButton:
-            print('Mouse click: LEFT CLICK')
-        if event.buttons() == Qt.RightButton:
-            print('Mouse click: RIGHT CLICK')
-        if event.buttons() == Qt.MidButton:
-            print('Mouse click: MIDDLE BUTTON')
     ## ==> END ##
 
-    ## EVENT ==> KEY PRESSED
-    ########################################################################
-    def keyPressEvent(self, event):
-        print('Key: ' + str(event.key()) + ' | Text Press: ' + str(event.text()))
-    ## ==> END ##
-
-    ## EVENT ==> RESIZE EVENT
-    ########################################################################
-    def resizeEvent(self, event):
-        self.resizeFunction()
-        return super(MainWindow, self).resizeEvent(event)
-
-    def resizeFunction(self):
-        print('Height: ' + str(self.height()) + ' | Width: ' + str(self.width()))
-    ## ==> END ##
 
     ########################################################################
     ## END ==> APP EVENTS
