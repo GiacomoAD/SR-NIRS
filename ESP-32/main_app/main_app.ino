@@ -3,7 +3,7 @@
 /* File description: SR-NIRS sensor main app                         */
 /* Author name:      Giacomo Dollevedo                               */
 /* Creation date:    30Jun2021                                       */
-/* Revision date:    14Jul2021                                       */
+/* Revision date:    22Jul2021                                       */
 /* ***************************************************************** */
 
 #include <Adafruit_ADS1X15.h>
@@ -163,12 +163,17 @@ void setup()
 
   for(int j=0;j<N_DET;j++){
     for(int i=0;i<N_GAIN;i++){
+      if(i==0){
+        sprintf(message_packet, "%s#C\0", message_packet, means[j][i]);
+      }
+      
       sprintf(message_packet, "%s%d;\0", message_packet, means[j][i]);
     }
+    
     sprintf(message_packet, "%s\n\0", message_packet);
   }
 
-  ESP_BT.printf("%d;%d;%d\n\0", NIRSsensor.chGains[0], NIRSsensor.chGains[1], NIRSsensor.chGains[2]);
+  ESP_BT.printf("#C%d;%d;%d\n\0", NIRSsensor.chGains[0], NIRSsensor.chGains[1], NIRSsensor.chGains[2]);
   ESP_BT.printf("%s", message_packet);
   message_packet[0] = '\0';
 
