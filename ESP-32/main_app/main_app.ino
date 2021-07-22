@@ -32,7 +32,7 @@
 
 /*IMPORTED CLASSES OBJECTS*/
 DroneTimer timer;       // ESP-32 timer
-SRSensor NIRSsensor;
+SRSensor NIRSsensor;    // NIRS Sensor
 BluetoothSerial ESP_BT; // Bluetooth comm
 
 /************ TIMER VARIABLES ***********/
@@ -108,6 +108,7 @@ void setup()
     Serial.begin(115200);
   }
 
+  /*Initializing NIRS Sensor object*/
   NIRSsensor.initSensor();
 
   /* Setting up timer frequency and interruption routine */
@@ -116,8 +117,9 @@ void setup()
   /* Setting up Bluetooth Connection*/
   ESP_BT.begin("ESP32", true);               //name of Bluetooth Device
   ESP_BT.setPin(pin);                        // Setting security PIN
-  connected_flag = ESP_BT.connect(address1); // Connecting to specific address
 
+  /*Connecting to Bluetooth HC-05 antenna*/
+  connected_flag = ESP_BT.connect(address1); // Connecting to specific address
   if (connected_flag)
   {
     if (DEBUG)
@@ -141,26 +143,31 @@ void setup()
   Wire.setClock(400000); // Setting I2C clock speed to 400 kHz
 
 
+  /*Waiting for GUI start signal*/
   while(start_flag == 0){
       if(ESP_BT.available()){
         ESP_BT.readBytesUntil('>', bufferIn, 255);
         start_flag = 1;
       }
       yield();
-    }
+  }
 
+  /*Switching to IR to calibrate*/
   NIRSsensor.switchIR();
+  
   timer.enableTimer();   // Enabling timer interruptions
 
 
-  /**/
+  /*AUTO GAIN SETTING ROUTINE*/
+  /*Finding mean read value for all channels + gains*/
   while(flagMeans)
     findMean();
 
-  /* AUTO GAIN CONTROL*/
+  /*Finding which gain sets the value closer to the middle of the adc range*/
   while (flagCalibrate)
     calibrate();
 
+  /*Creating configuration parameters message*/
   for(int j=0;j<N_DET;j++){
     for(int i=0;i<N_GAIN;i++){
       if(i==0){
@@ -173,10 +180,12 @@ void setup()
     sprintf(message_packet, "%s\n\0", message_packet);
   }
 
-  ESP_BT.printf("#C%d;%d;%d\n\0", NIRSsensor.chGains[0], NIRSsensor.chGains[1], NIRSsensor.chGains[2]);
-  ESP_BT.printf("%s", message_packet);
+  /*Sending configuration message over Bluetooth*/
+  ESP_BT.printf("#C%d;%d;%d\n\0", NIRSsensor.chGains[0], NIRSsensor.chGains[1], NIRSsensor.chGains[2]); /*Auto gain settings*/
+  ESP_BT.printf("%s", message_packet); /*Sending all means by channel*/
   message_packet[0] = '\0';
 
+  /*Resetting time variable to timestamp*/
   initTime = initTime = double(millis()) / 1000;
    
 }
@@ -188,18 +197,24 @@ void loop()
   {
     timer_flag = 0;
 
+    /*Timestamping on the first data point*/
     if(sensorState == 0){
       cTime = getTimestamp();
     }
-    
+
+    /*Reading from NIRS Sensor*/
     NIRSsensor.readState(sensorState);
     sensorState++;
     
   }
 
+  /*When the last sensor is read the outgoing message buffer is written*/
   if(sensorState == 6){
     sensorState = 0;
     /*Writing to Bluetooth outgoing buffer*/
+    /*Message contains data structured as:*/
+    /*time;IR[1];R[1];IR[2];R[2];IR[3];R[3]*/
+    /*where 1, 2 and 3 are each respective channel*/
     sprintf(message_packet, "%s%.2f;%d;%d;%d;%d;%d;%d\n\0", message_packet, cTime, NIRSsensor.channelReadingsIR[0], NIRSsensor.channelReadingsR[0],
       NIRSsensor.channelReadingsIR[1], NIRSsensor.channelReadingsR[1], NIRSsensor.channelReadingsIR[2], NIRSsensor.channelReadingsR[2]);
 
@@ -222,6 +237,15 @@ void loop()
   
 }
 
+/* ************************************************************************************ */
+/* Method's name:          findMean                                                     */ 
+/* Description:            Finds every channel mean read value for each gain, based on  */
+/*                         timer frequency                                              */
+/*                                                                                      */
+/* Entry parameters:       n/a                                                          */
+/*                                                                                      */
+/* Return parameters:      n/a                                                          */
+/* ************************************************************************************ */
 void findMean(){
   if(timer_flag){
     timer_flag = 0;
@@ -261,6 +285,15 @@ void findMean(){
   }
 }
 
+/* ************************************************************************************ */
+/* Method's name:          calibrate                                                    */ 
+/* Description:            Uses mean values array to find set which gain will get the   */
+/*                         sensor reading closer to the middle of adc range             */
+/*                                                                                      */
+/* Entry parameters:       n/a                                                          */
+/*                                                                                      */
+/* Return parameters:      n/a                                                          */
+/* ************************************************************************************ */
 void calibrate(){
 
   int testComp[N_DET][N_GAIN];
@@ -300,6 +333,14 @@ void calibrate(){
   
 }
 
+/* ************************************************************************************ */
+/* Method's name:          getTimestamp                                                 */ 
+/* Description:            Calculate time based on the initTime variable                */
+/*                                                                                      */
+/* Entry parameters:       n/a                                                          */
+/*                                                                                      */
+/* Return parameters:      double -> time since the device began the measuring routine  */
+/* ************************************************************************************ */
 double getTimestamp(){
   return double(millis()) / 1000 - initTime;
 }
