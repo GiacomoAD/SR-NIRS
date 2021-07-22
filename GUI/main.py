@@ -64,7 +64,9 @@ class MainWindow(QMainWindow):
         self.signal.sig_start_acq.connect(self.set_startButton)
         self.signal.sig_dataPlot.connect(self.plotData)
 
-        self.x = ["0.0;0;0;0;0\n"]
+        app.aboutToQuit.connect(self.closeEvent)
+
+        self.x = ["0.0;0;0;0;0;0;0\n"]
 
         self.timer0 = QTimer(self)
         self.time = QTime(0,0,0)
@@ -371,6 +373,18 @@ class MainWindow(QMainWindow):
         self.dragPos = event.globalPos()
     ## ==> END ##
 
+    def closeEvent(self):
+        print('Saving .nirs file')
+        try:
+            self.USBhandler.disconnect()
+            saveFile = NIRSFormatter(filePath=self.diretorio[0])
+            saveFile.saveNIRS(self.diretorio[0])
+
+        except Exception as e:
+            print('FAILED TO SAVE .nirs FILE!')
+            print(e)
+            
+        sys.exit(0)
 
     ########################################################################
     ## END ==> APP EVENTS

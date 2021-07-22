@@ -19,6 +19,8 @@ class USBFunctions():
        self.ser.baudrate = 115200
        self.bufferIn = ''
        self.vet = vetor
+       self.configFlag = False
+       self.configBuffer = []
 
     def findDevices(self):
         self.isLooking = True
@@ -70,6 +72,8 @@ class USBFunctions():
         if(self.threadAlive):
             self.threadAlive = False
             self.readingThread.join()
+            self.writingThread.join()
+
         self.ser.close()
 
         if(self.devicePort == 'NULL'):
@@ -84,6 +88,8 @@ class USBFunctions():
 
     def keepReading(self, console_signal):
         start_write_thread = 1
+        lines_read = 0
+
         while True:
             if(self.threadAlive == False):
                 break
@@ -94,13 +100,16 @@ class USBFunctions():
                 
                 for line in self.bufferIn:
                     line = line.decode('utf-8')
-                    self.vet.append(line)
+
+                    # If incoming message is a configuration message
+                    if line[0:2] == '#C':
+                        self.configFlag = True
+                        self.configBuffer.append(line)
+                    else:
+                        self.vet.append(line)
 
                 self.bufferIn = ''
-                #self.vet.append(self.bufferIn)
-                
-                #if(len(bufferIn) > 1):
-                #print('EMITINDO SINAL')
+
                 self.plotSignal.emit(True)
 
                 if(start_write_thread == 1 and len(self.vet) >= 500):
@@ -109,15 +118,6 @@ class USBFunctions():
                     self.writingThread.daemon = True
                     self.writingThread.start()
 
-                # with open(file_path, "a+") as f:
-                #     #f.write((self.ser.readline()).decode('utf-8'))
-                #     for line in self.bufferIn:
-                #         linha = line.decode('utf-8')
-                #         if(len(linha.split(';')) != 9 or float(linha.split(';')[0]) > 2000 or (linha.split(';')[-2] != '6' and  linha.split(';')[-2] != '7' and  linha.split(';')[-2] != '5')):
-                #             pass
-                #         else:
-                #             f.write(linha)
-                #print(self.ser.readline())
 
             except Exception as e:
                 print(e)
@@ -130,18 +130,32 @@ class USBFunctions():
         string_T = string_T.replace(":", "-")       #date and current time
 
         file_path = self.pathFolder[0] + '/' + string_T + r'.csv'
-
+        config_file_path = self.pathFolder[0] + '/' + string_T + r'_config.csv'
 
         with open(file_path, "a+") as f:
             while True:
+                if(self.threadAlive == False):
+                    break
+
                 for i, linha in enumerate(self.vet):
                     if(i >= last_line):
                         f.write(linha)
                         last_line += 1
 
                 f.flush()
+
+                if self.configFlag == True:
+                    self.configFlag = False
+
+                    with open(config_file_path, "a+") as fConfig:
+                        for linha in self.configBuffer:
+                            fConfig.write(linha[2:])
+
+                    
                 time.sleep(2)
 
+        
+            
                     
  
 
