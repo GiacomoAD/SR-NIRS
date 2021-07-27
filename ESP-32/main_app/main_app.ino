@@ -3,7 +3,7 @@
 /* File description: SR-NIRS sensor main app                         */
 /* Author name:      Giacomo Dollevedo                               */
 /* Creation date:    30Jun2021                                       */
-/* Revision date:    22Jul2021                                       */
+/* Revision date:    27Jul2021                                       */
 /* ***************************************************************** */
 
 #include <Adafruit_ADS1X15.h>
@@ -148,6 +148,7 @@ void setup()
       if(ESP_BT.available()){
         ESP_BT.readBytesUntil('>', bufferIn, 255);
         start_flag = 1;
+        ESP_BT.printf("BTSTART\n\0");
       }
       yield();
   }

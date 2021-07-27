@@ -17,6 +17,7 @@ class USBFunctions():
        self.threadAlive = False
        self.isLooking = False
        self.ser.baudrate = 115200
+       self.ser.timeout = 0.5
        self.bufferIn = ''
        self.vet = vetor
        self.configFlag = False
@@ -49,24 +50,50 @@ class USBFunctions():
 
     def startUSBacquisiton(self):
         print('Sending > byte')
-        self.signal.emit('\n'+ 'Sent START SIGNAL to main device')
+        self.signal.emit('\n'+ '\nSent START SIGNAL to main device')
         self.ser.write(b'>')
 
-        timestamp = str(datetime.today())
-        timestamp = timestamp[:-10].replace(' ', '_')
-        timestamp = timestamp.replace(':','-')
-        
-        self.pathFolder[0] = self.pathFolder[0] + "/" + timestamp
-        Path(self.pathFolder[0]).mkdir(parents=True, exist_ok=True)
-        
-        #Path(file_path + "/my/directory").mkdir(parents=True, exist_ok=True)
+        if(not self.checkStart()):
+            self.signal.emit('\n'+ 'Unable to connect to device. Please, check connections and try again.')
 
-        time.sleep(0.5)
-        self.threadAlive = True
-        self.readingThread = Thread(target=self.keepReading, args=(self.signal,))
-        self.readingThread.daemon = True
-        self.readingThread.start()
+        else:
+            self.signal2.emit(False)
+            self.signal.emit('#C')
+            self.signal.emit('CONNECTED!\n' + 'Self calibration routine started.')
+
+            timestamp = str(datetime.today())
+            timestamp = timestamp[:-10].replace(' ', '_')
+            timestamp = timestamp.replace(':','-')
+            
+            self.pathFolder[0] = self.pathFolder[0] + "/" + timestamp
+            Path(self.pathFolder[0]).mkdir(parents=True, exist_ok=True)
+            
+            self.signal.emit('\n'+ 'Data will be logged and saved at: ' + str(self.pathFolder[0]))
+
+            #Path(file_path + "/my/directory").mkdir(parents=True, exist_ok=True)
+
+            time.sleep(0.25)
+            self.ser.timeout = None
+            self.threadAlive = True
+            self.readingThread = Thread(target=self.keepReading, args=(self.signal,))
+            self.readingThread.daemon = True
+            self.readingThread.start()
     
+
+    def checkStart(self):
+        try:
+            incBuffer = self.ser.readline()
+            incBuffer = incBuffer.decode('utf-8')
+
+            if(incBuffer == 'BTSTART\n'):
+                return True
+        
+            else:
+                return False
+
+        except Exception as e:
+            print(e)
+            return False
 
     def disconnect(self):
         if(self.threadAlive):
@@ -125,7 +152,7 @@ class USBFunctions():
 
     def threadedWriteFile(self):
         last_line = 0
-        string_T = time.ctime()                     #   Creating file name
+        string_T = time.ctime()                     # Creating file name
         string_T = string_T.replace(" ", "_")       #based on server starting 
         string_T = string_T.replace(":", "-")       #date and current time
 
