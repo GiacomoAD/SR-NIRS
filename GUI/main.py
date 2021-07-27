@@ -288,7 +288,11 @@ class MainWindow(QMainWindow):
 
 
     def print_console_log(self, str):
-        self.ui.plainTextEdit_2.setPlainText( self.ui.plainTextEdit_2.toPlainText() + str)
+
+        if(str == '#C'):
+            self.ui.plainTextEdit_2.setPlainText('')
+        else:
+            self.ui.plainTextEdit_2.setPlainText( self.ui.plainTextEdit_2.toPlainText() + str)
         
     def set_startButton(self, flag):
         self.ui.button_start_acq.setEnabled(flag)
