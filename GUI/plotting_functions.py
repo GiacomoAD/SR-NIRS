@@ -6,6 +6,9 @@ import matplotlib.animation as FuncAnimation
 global last_line
 last_line = 0
 
+
+NUMBER_OF_CHANNELS = 3
+
 def resetFlag(flag):
         flag[0] = True
         pass
@@ -33,8 +36,8 @@ def readFromFile(file_path, x, y, threadFlag, window):
                 splitData = data.split(';')
                 splitData[-1] = splitData[-1].replace('\n','')
                 #print(splitData)
-                if len(splitData) != 5:
-                    splitData = [np.nan, np.nan, np.nan, np.nan, np.nan]
+                if len(splitData) != 7:
+                    splitData = [np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan]
 
                 try:
                     splitData = [float(j) for j in splitData]
@@ -43,11 +46,13 @@ def readFromFile(file_path, x, y, threadFlag, window):
                     continue
 
                 #x.append(splitData[0])
-                window.xnp = np.append(window.xnp, splitData[0])
-                window.ynp[0] = np.append(window.ynp[0], splitData[1])
-                window.ynp[1] = np.append(window.ynp[1], splitData[2])
-                window.ynp[2] = np.append(window.ynp[2], splitData[3])
-                window.ynp[3] = np.append(window.ynp[3], splitData[4])
+                window.xnp = np.append(window.xnp, splitData[0])        #Time 
+                window.ynp[0] = np.append(window.ynp[0], splitData[1])  #Ch1 - IR
+                window.ynp[1] = np.append(window.ynp[1], splitData[2])  #Ch1 - R
+                window.ynp[2] = np.append(window.ynp[2], splitData[3])  #Ch2 - IR
+                window.ynp[3] = np.append(window.ynp[3], splitData[4])  #Ch2 - R
+                window.ynp[4] = np.append(window.ynp[4], splitData[5])  #Ch3 - IR
+                window.ynp[5] = np.append(window.ynp[5], splitData[6])  #Ch3 - R
 
         else:
             #print('Agora eh FALSA')
@@ -107,11 +112,11 @@ def gen_animate(window):
     j = 0
 
 
-    cte = 100
+    cte = 100   # Number of data points per iteration
     n = 1;
 
     plot_time_buffer = np.asarray([])
-    plot_data_buffer = [np.asarray([]) for i in range(2)]
+    plot_data_buffer = [np.asarray([]) for i in range(2*NUMBER_OF_CHANNELS)]
 
     autoscale_x_axis = False
     t_min = 0
@@ -132,8 +137,13 @@ def gen_animate(window):
                 plot_time_buffer = np.append(plot_time_buffer, window.xnp[j:j+cte])
                 #plot_data_buffer[0].extend(window.y[0][0][j:j+10])
                 #plot_data_buffer[1].extend(window.y[0][1][j:j+10])
-                plot_data_buffer[0] = np.append(plot_data_buffer[0], window.ynp[0][j:j+cte])
-                plot_data_buffer[1] = np.append(plot_data_buffer[1], window.ynp[1][j:j+cte])
+                plot_data_buffer[0] = np.append(plot_data_buffer[0], window.ynp[0][j:j+cte]) #Ch1 - IR
+                plot_data_buffer[1] = np.append(plot_data_buffer[1], window.ynp[1][j:j+cte]) #Ch1 - R
+                plot_data_buffer[2] = np.append(plot_data_buffer[2], window.ynp[2][j:j+cte]) #Ch2 - IR
+                plot_data_buffer[3] = np.append(plot_data_buffer[3], window.ynp[3][j:j+cte]) #Ch2 - R
+                plot_data_buffer[4] = np.append(plot_data_buffer[4], window.ynp[4][j:j+cte]) #Ch3 - IR
+                plot_data_buffer[5] = np.append(plot_data_buffer[5], window.ynp[5][j:j+cte]) #Ch3 - R
+                
 
 
                 j = len(plot_time_buffer)
@@ -148,8 +158,9 @@ def gen_animate(window):
             else:
                 pass
 
-        except:
+        except Exception as e:
             print('Falhou em ler os dados')
+            #print(e)
             new_points_flag = False
             autoscale_x_axis = False
             yield [plot_time_buffer, plot_data_buffer]
@@ -158,7 +169,8 @@ def gen_animate(window):
         try:
             if autoscale_x_axis == False and plot_time_buffer[-1] >= 5:
                 autoscale_x_axis = True
-        except:
+        except Exception as e:
+            #print(e)
             pass
 
         #print(plot_time_buffer + plot_data_buffer)
@@ -168,10 +180,11 @@ def gen_animate(window):
         try:
             if autoscale_y_axis == True and new_points_flag == True:
                 new_points_flag = False
-                del autoscale_points[0:10]
-                autoscale_points.extend(plot_data_buffer[0][-10:])
+                del autoscale_points[0:25]
+                autoscale_points.extend(plot_data_buffer[0][-25:])
                 window.canvas1.ax1.set_ylim([np.amin(autoscale_points), np.amax(autoscale_points)])
-        except:
+        except Exception as e:
+            #print(e)
             pass
 
         # AUTOSCALING X-AXIS
@@ -183,7 +196,9 @@ def gen_animate(window):
                     t_min += 0.5
                     t_max += 0.5
                     window.canvas1.ax1.set_xlim([t_min, t_max])
-        except:
+
+        except Exception as e:
+            #print(e)
             pass
 
 
@@ -198,14 +213,20 @@ def animate_plot(value, ln, window):
     # print(value)
 
     #tempo = np.asarray(value[0])
-    canal1_r = (value[1][0])
-    canal1_ir = (value[1][1])
+    ch1IR = (value[1][0])
+    ch1R = (value[1][1])
+
+    ch2IR = (value[1][2])
+    ch2R = (value[1][3])
+
+    ch3IR = (value[1][4])
+    ch3R = (value[1][5])
 
     r_gain = float(window.ui.label_14.text())
     ir_gain = float(window.ui.label_13.text())
 
-    ln[0][0].set_data(value[0], canal1_r*r_gain)
-    ln[1][0].set_data(value[0], canal1_ir*ir_gain)
+    ln[0][0].set_data(value[0], ch1IR*ir_gain)
+    ln[1][0].set_data(value[0], ch1R*r_gain)
 
 
     return ln,

@@ -81,7 +81,7 @@ class MainWindow(QMainWindow):
 
         
         self.xnp = np.asarray([])
-        self.ynp = [np.asarray([]) for i in range(4)]
+        self.ynp = [np.asarray([]) for i in range(6)]
 
         self.y = []
         self.y.append([[],[]])
@@ -299,6 +299,7 @@ class MainWindow(QMainWindow):
 
     def plotData(self, flag):
         #print('SINAL RECEBIDO')
+        
         self.threadFlag[0] = flag
         readFromFile('', self.xnp, self.y, self.threadFlag, self)
 

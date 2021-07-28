@@ -136,14 +136,15 @@ class USBFunctions():
                         self.vet.append(line)
 
                 self.bufferIn = ''
-
                 self.plotSignal.emit(True)
-
+                
                 if(start_write_thread == 1 and len(self.vet) >= 500):
+                    
                     start_write_thread = 0
                     self.writingThread = Thread(target=self.threadedWriteFile)
                     self.writingThread.daemon = True
                     self.writingThread.start()
+                    
 
 
             except Exception as e:
