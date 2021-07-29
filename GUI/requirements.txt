@@ -1,0 +1,5 @@
+numpy==1.20.2
+matplotlib==3.4.1
+scipy==1.7.0
+pyserial==3.5
+PySide2==5.15.2
