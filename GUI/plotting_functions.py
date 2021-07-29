@@ -186,7 +186,7 @@ def animate_plot(value, ln, window):
 
 
 
-def startPlot(window, file_path):
+def startPlot(window):
     ani_interval = 200 # Animation frames interval (in milliseconds)
     ani = FuncAnimation.FuncAnimation(window.canvas1.fig1, animate_plot, frames=gen_animate(window), fargs=(window.ln, window,), blit=False, interval = ani_interval)
     return ani

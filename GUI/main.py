@@ -82,7 +82,7 @@ class MainWindow(QMainWindow):
         
         
         self.USBhandler = USBFunctions(self.diretorio, self.signal.sig_with_str, self.signal.sig_start_acq, self.signal.sig_dataPlot, self.signal.sig_getCfg, self.x)
-        self.BThandler = BTFunctions(self.signal.sig_with_str, self.signal.sig_start_acq, self.x)
+        #self.BThandler = BTFunctions(self.signal.sig_with_str, self.signal.sig_start_acq, self.x)
 
         
         self.xnp = np.asarray([])
@@ -209,18 +209,12 @@ class MainWindow(QMainWindow):
         self.plt_colors = ['r','b','g','y','c','m','w', 'r--','b--','g--','y--','c--','m--','w--','r','b','g','y','c','m','w', 'r--','b--','g--','y--','c--','m--','w--']                      #Colors can also be hexstring code -- THIS IS CURRENTLY A PLACEHOLDER
         self.ln = [self.canvas1.ax1.plot([], [], self.plt_colors[i]) for i in range(2*self.ch_number)]
         
-        list_of_files = glob.glob(r'C:\Users\GiacomoAD\Desktop\PythonEnv\GUI\Logs\*.csv') # * means all if need specific format then *.csv
-        file_path = max(list_of_files, key=os.path.getctime) # finding last created file to save stuff
-        
-
         self.threadFlag = []
         self.threadFlag.append(True)
 
         self.ui.gridLayout_4.addWidget(self.canvas1, 0, 0, 1, 1)
 
-        self.animation = startPlot(self, file_path)
-
-
+        self.animation = startPlot(self)
 
         ## CANVAS 2 - FFT
         self.canvas2 = MplCanvas(self, width=5, height=4, dpi=100)
