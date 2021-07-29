@@ -24,18 +24,18 @@ This system was developed along with a Python GUI to enable wireless (currently 
 First of all, it is recommended to create a Python Virtual Environment. This can be done through python's embedded  (v. 3.4+) module called **venv**:
 
 ```
-$ python -m venv [directory]
+python -m venv [directory]
 ``` 
 
 Then, the environment should be activated through:  
 - ### Windows  
 ``` 
-C:\> [directory]\Scripts\activate.bat
+[directory]\Scripts\activate.bat
 ```
 
 - ### Linux or MacOS  
 ```
-$ source [directory]/bin/activate 
+source [directory]/bin/activate 
 ``` 
 
 [More information on python virtual environments can be found here.](https://python.land/virtual-environments/virtualenv)
@@ -47,14 +47,14 @@ All of the required packages are included on **_requirements.txt_** file, inside
 These requirements can be installed through python's **pip** module, as it follows:
 
 ```
-$ pip install -r requirements.txt
+pip install -r requirements.txt
 ``` 
 
 ### Running GUI
 
 To run the system GUI, the **_main.py_** script should be executed:
 ```
-$ python main.py
+python main.py
 ``` 
 
 ***
