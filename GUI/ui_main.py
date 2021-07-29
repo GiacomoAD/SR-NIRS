@@ -18,7 +18,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(1040, 720)
+        MainWindow.resize(1040, 736)
         MainWindow.setMinimumSize(QSize(1000, 720))
         palette = QPalette()
         brush = QBrush(QColor(255, 255, 255, 255))
@@ -1193,11 +1193,9 @@ class Ui_MainWindow(object):
 
         self.formLayout.setWidget(0, QFormLayout.LabelRole, self.label_9)
 
-        self.comboBox_2 = QComboBox(self.page_config_on)
-        self.comboBox_2.addItem("")
-        self.comboBox_2.addItem("")
-        self.comboBox_2.setObjectName(u"comboBox_2")
-        self.comboBox_2.setStyleSheet(u"QComboBox{\n"
+        self.combo_chSelect = QComboBox(self.page_config_on)
+        self.combo_chSelect.setObjectName(u"combo_chSelect")
+        self.combo_chSelect.setStyleSheet(u"QComboBox{\n"
 "	background-color: rgb(27, 29, 35);\n"
 "	border-radius: 5px;\n"
 "	border: 2px solid rgb(27, 29, 35);\n"
@@ -1214,7 +1212,7 @@ class Ui_MainWindow(object):
 "	selection-background-color: rgb(39, 44, 54);\n"
 "}")
 
-        self.formLayout.setWidget(0, QFormLayout.FieldRole, self.comboBox_2)
+        self.formLayout.setWidget(0, QFormLayout.FieldRole, self.combo_chSelect)
 
         self.verticalSpacer_5 = QSpacerItem(20, 10, QSizePolicy.Minimum, QSizePolicy.Fixed)
 
@@ -1364,9 +1362,9 @@ class Ui_MainWindow(object):
 
         self.formLayout.setWidget(10, QFormLayout.LabelRole, self.label_15)
 
-        self.plainTextEdit_3 = QPlainTextEdit(self.page_config_on)
-        self.plainTextEdit_3.setObjectName(u"plainTextEdit_3")
-        self.plainTextEdit_3.setStyleSheet(u"QPlainTextEdit {\n"
+        self.plainTextEdit_ChSettings = QPlainTextEdit(self.page_config_on)
+        self.plainTextEdit_ChSettings.setObjectName(u"plainTextEdit_ChSettings")
+        self.plainTextEdit_ChSettings.setStyleSheet(u"QPlainTextEdit {\n"
 "	background-color: rgb(27, 29, 35);\n"
 "	border-radius: 5px;\n"
 "	padding: 10px;\n"
@@ -1378,9 +1376,9 @@ class Ui_MainWindow(object):
 "	border: 2px solid rgb(91, 101, 124);\n"
 "}\n"
 "")
-        self.plainTextEdit_3.setReadOnly(True)
+        self.plainTextEdit_ChSettings.setReadOnly(True)
 
-        self.formLayout.setWidget(10, QFormLayout.FieldRole, self.plainTextEdit_3)
+        self.formLayout.setWidget(10, QFormLayout.FieldRole, self.plainTextEdit_ChSettings)
 
         self.verticalSpacer_6 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Fixed)
 
@@ -1549,7 +1547,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.stackedWidget.setCurrentIndex(2)
+        self.stackedWidget.setCurrentIndex(0)
         self.stackedWidget_2.setCurrentIndex(0)
 
 
@@ -1595,9 +1593,6 @@ class Ui_MainWindow(object):
         self.lineEdit_2.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Leave blank to show all", None))
         self.label_3.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p><span style=\" font-size:10pt; font-weight:600;\">Experiment Notes</span></p></body></html>", None))
         self.label_9.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p><span style=\" font-size:10pt; font-weight:600;\">Channel Selection</span></p></body></html>", None))
-        self.comboBox_2.setItemText(0, QCoreApplication.translate("MainWindow", u"1", None))
-        self.comboBox_2.setItemText(1, QCoreApplication.translate("MainWindow", u"2", None))
-
         self.label_14.setText(QCoreApplication.translate("MainWindow", u"1", None))
         self.label_10.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p><span style=\" font-size:10pt; font-weight:600;\">850nm Gain</span></p></body></html>", None))
         self.label_13.setText(QCoreApplication.translate("MainWindow", u"1", None))
