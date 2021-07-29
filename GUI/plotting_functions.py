@@ -13,12 +13,11 @@ def resetFlag(flag):
         flag[0] = True
         pass
 
-def readFromFile(file_path, x, y, threadFlag, window):
+def readFromFile(x, y, threadFlag, window):
     global last_line
     #while True:
     while threadFlag[0]:
-        #threadFlag[0] = False
-        #print('Openning File')
+
 
         if last_line < len(window.x):
 
@@ -57,55 +56,11 @@ def readFromFile(file_path, x, y, threadFlag, window):
         else:
             #print('Agora eh FALSA')
             threadFlag[0] = False
-        
-        # with open(file_path, "r") as f:
-        #     for i, line in enumerate (f):
-        #         if i >= last_line:
-        #             data = line
-        #             last_line = i+1
-        #             # print("Ultima linha" + str(last_line) + '\t' + str(data))
-        #             # print(data)
-        #             ## NOTHING TO READ
-        #             if data == '':
-        #                 threadFlag[0] = False
-        #                 if threadFlag[0] == False:
-        #                     #print('Stopping Thread')
-        #                     break
-                    
-        #             ## READ A VALUE
-        #             else:
-        #                 threadFlag[0] = True
-        #                 splitData = data.split(';')
-                        
-        #                 if len(splitData) != 3:
-        #                     splitData = [np.nan, np.nan, np.nan]
-
-        #                 try:
-        #                     splitData = [float(j) for j in splitData]
-        #                 except:
-        #                     splitData = [np.nan for j in splitData]
-        #                     continue
-
-        #                 #x.append(splitData[0])
-        #                 window.xnp = np.append(window.xnp, splitData[0])
-        #                 window.ynp[0] = np.append(window.ynp[0], splitData[1])
-        #                 window.ynp[1] = np.append(window.ynp[1], splitData[2])
-        #                 #y[0][0].append(splitData[1])
-        #                 #y[0][1].append(splitData[2])
-                        
-            
-        # while threadFlag[0] == False:
-        #     resetFlag(threadFlag)
-        #     #print('Pausing 1s')
-    
-                    
 
 ########################################################################
 ## PLOTTING ANIMATION FUNCTIONS
 ############################## ---/--/--- ##############################
 
-#plot_time_buffer = np.zeros(1)
-#plot_data_buffer = [[],[]]
 
 def gen_animate(window):
     i = 0
@@ -133,10 +88,9 @@ def gen_animate(window):
         try:
             if len(window.xnp) > cte*n:
                 n += 1
-                #plot_time_buffer.extend(window.x[j:j+10])
+
                 plot_time_buffer = np.append(plot_time_buffer, window.xnp[j:j+cte])
-                #plot_data_buffer[0].extend(window.y[0][0][j:j+10])
-                #plot_data_buffer[1].extend(window.y[0][1][j:j+10])
+
                 plot_data_buffer[0] = np.append(plot_data_buffer[0], window.ynp[0][j:j+cte]) #Ch1 - IR
                 plot_data_buffer[1] = np.append(plot_data_buffer[1], window.ynp[1][j:j+cte]) #Ch1 - R
                 plot_data_buffer[2] = np.append(plot_data_buffer[2], window.ynp[2][j:j+cte]) #Ch2 - IR
@@ -148,12 +102,10 @@ def gen_animate(window):
 
                 j = len(plot_time_buffer)
                 new_points_flag = True
-                #print(plot_time_buffer)
 
                 if len(autoscale_points) < 100:
                     autoscale_points.extend(plot_data_buffer[0][-10:])
                     autoscale_y_axis = True
-                    #window.canvas1.ax1.set_ylim([np.amin(autoscale_points), np.amax(autoscale_points)])
 
             else:
                 pass
@@ -183,6 +135,7 @@ def gen_animate(window):
                 del autoscale_points[0:25]
                 autoscale_points.extend(plot_data_buffer[0][-25:])
                 window.canvas1.ax1.set_ylim([np.amin(autoscale_points), np.amax(autoscale_points)])
+
         except Exception as e:
             #print(e)
             pass
