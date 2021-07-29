@@ -7,11 +7,12 @@ from datetime import datetime
 from pathlib import Path
 
 class USBFunctions():
-    def __init__(self, folder_path, console_signal, start_signal, plot_signal, vetor):
+    def __init__(self, folder_path, console_signal, start_signal, plot_signal, cfg_signal, vetor):
        self.pathFolder = folder_path
        self.signal = console_signal
        self.signal2 = start_signal
        self.plotSignal = plot_signal
+       self.cfgSignal = cfg_signal
        self.devicePort = "NULL"
        self.ser = serial.Serial()
        self.threadAlive = False
@@ -178,6 +179,8 @@ class USBFunctions():
                     with open(config_file_path, "a+") as fConfig:
                         for linha in self.configBuffer:
                             fConfig.write(linha[2:])
+                    
+                    self.cfgSignal.emit(True)
 
                     
                 time.sleep(2)

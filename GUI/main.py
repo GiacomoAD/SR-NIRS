@@ -41,6 +41,8 @@ from pathlib import Path
 # GUI FILE
 from app_modules import *
 
+CH_NUMBER = 3
+
 class MplCanvas(FigureCanvasQTAgg):
     def __init__(self, parent=None, width=5, height=4, dpi=100):
         self.fig1, self.ax1 = plt.subplots()
@@ -59,10 +61,13 @@ class MainWindow(QMainWindow):
 
         self.diretorio = [os.getcwd()]
 
+        self.chGains = ['Not Calibrated' for i in range(1,CH_NUMBER+1)]
+
         self.signal = MySignal()
         self.signal.sig_with_str.connect(self.print_console_log)
         self.signal.sig_start_acq.connect(self.set_startButton)
         self.signal.sig_dataPlot.connect(self.plotData)
+        self.signal.sig_getCfg.connect(self.getChConfig)
 
         app.aboutToQuit.connect(self.closeEvent)
 
@@ -76,7 +81,7 @@ class MainWindow(QMainWindow):
         self.timerFlag = 0
         
         
-        self.USBhandler = USBFunctions(self.diretorio, self.signal.sig_with_str, self.signal.sig_start_acq, self.signal.sig_dataPlot, self.x)
+        self.USBhandler = USBFunctions(self.diretorio, self.signal.sig_with_str, self.signal.sig_start_acq, self.signal.sig_dataPlot, self.signal.sig_getCfg, self.x)
         self.BThandler = BTFunctions(self.signal.sig_with_str, self.signal.sig_start_acq, self.x)
 
         
@@ -190,12 +195,6 @@ class MainWindow(QMainWindow):
         ########################################################################
         self.ui.button_start_acq.setEnabled(False)
 
-
-        ## ==> QTableWidget RARAMETERS
-        ########################################################################
-        #self.ui.tableWidget.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
-        ## ==> END ##
-
         ## CANVAS 1 - MAIN PLOT
         self.canvas1 = MplCanvas(self, width=5, height=4, dpi=100)
         self.canvas1.ax1.set_xlabel('Time [s]')
@@ -205,22 +204,17 @@ class MainWindow(QMainWindow):
         self.canvas1.fig1.set_facecolor('none')
         self.canvas1.fig1.subplots_adjust(left=0.05, right=0.97, bottom=0.15, top=0.9)
 
-        self.ch_number = 1
+        self.ch_number = CH_NUMBER
         self.ch_key=[n for n in range(1,self.ch_number+1)] # Channels that are chosen at the moment.
         self.plt_colors = ['r','b','g','y','c','m','w', 'r--','b--','g--','y--','c--','m--','w--','r','b','g','y','c','m','w', 'r--','b--','g--','y--','c--','m--','w--']                      #Colors can also be hexstring code -- THIS IS CURRENTLY A PLACEHOLDER
         self.ln = [self.canvas1.ax1.plot([], [], self.plt_colors[i]) for i in range(2*self.ch_number)]
         
         list_of_files = glob.glob(r'C:\Users\GiacomoAD\Desktop\PythonEnv\GUI\Logs\*.csv') # * means all if need specific format then *.csv
         file_path = max(list_of_files, key=os.path.getctime) # finding last created file to save stuff
-        #file_path = r'C:\Users\GiacomoAD\Desktop\PythonEnv\GUI\Logs\Sat_Apr_17_22-57-43_2021.csv'
-
+        
 
         self.threadFlag = []
         self.threadFlag.append(True)
-
-        self.fileThread = Thread(target=readFromFile, args=(file_path,self.xnp,self.y,self.threadFlag,self,))
-        self.fileThread.daemon = True
-        self.fileThread.start()
 
         self.ui.gridLayout_4.addWidget(self.canvas1, 0, 0, 1, 1)
 
@@ -242,19 +236,22 @@ class MainWindow(QMainWindow):
         #                                                                      #
         ############################## ---/--/--- ##############################
 
-
-
-
-
         ## SHOW ==> MAIN WINDOW
         ########################################################################
         self.show()
         ## ==> END ##
 
+        ## CHANNEL CONFIG COMBO BOX
+        for i in range(1,self.ch_number+1):
+            self.ui.combo_chSelect.addItem(str(i))
+
+        self.ui.combo_chSelect.currentIndexChanged.connect(lambda: self.chConfigDisp())
+        self.chConfigDisp()
+
     ########################################################################
     ## MENUS ==> DYNAMIC MENUS FUNCTIONS
     ########################################################################
-    
+
     def radioCheck(self):
         if(self.ui.radioButton_3.isChecked()):
             self.ui.plainTextEdit_2.clear()
@@ -286,29 +283,14 @@ class MainWindow(QMainWindow):
             except:
                 pass
 
-
-    def print_console_log(self, str):
-
-        if(str == '#C'):
-            self.ui.plainTextEdit_2.setPlainText('')
-        else:
-            self.ui.plainTextEdit_2.setPlainText( self.ui.plainTextEdit_2.toPlainText() + str)
-        
+  
     def set_startButton(self, flag):
         self.ui.button_start_acq.setEnabled(flag)
 
     def plotData(self, flag):
         #print('SINAL RECEBIDO')
-        
         self.threadFlag[0] = flag
-        readFromFile('', self.xnp, self.y, self.threadFlag, self)
-
-    def showTime(self):
-        currentTime = QTime.currentTime()
-        self.ui.timeC_label.setText(currentTime.toString('hh:mm:ss'))
-        if(len(self.x) >= 150):
-            self.time = self.time.addSecs(1)
-            self.ui.timeL_label.setText(self.time.toString('hh:mm:ss'))
+        readFromFile(self.xnp, self.y, self.threadFlag, self)
 
     def saveTrigger(self):
         tempo = self.time.toString('hh:mm:ss')
@@ -320,7 +302,6 @@ class MainWindow(QMainWindow):
             f.write(str(60*int(tempo[1]) + int(tempo[2])) + '\n')
         pass
 
-
         print(60*int(tempo[1]) + int(tempo[2]))
 
     def chooseFolder(self):
@@ -331,7 +312,6 @@ class MainWindow(QMainWindow):
             self.diretorio[0] = self.diretorio[0].replace('\\','/')
 
         self.ui.lineEd_chooseFolder.setText(self.diretorio[0])
-
 
     def Button(self):
         # GET BT CLICKED
@@ -360,6 +340,49 @@ class MainWindow(QMainWindow):
             btnWidget.setStyleSheet(UIFunctions.selectMenu(btnWidget.styleSheet()))
 
     ## ==> END ##
+
+    ########################################################################
+    ## START ==> UTILITY FUNCTIONS
+    ########################################################################
+
+    def print_console_log(self, str):
+
+        if(str == '#C'):
+            self.ui.plainTextEdit_2.setPlainText('')
+        else:
+            self.ui.plainTextEdit_2.setPlainText( self.ui.plainTextEdit_2.toPlainText() + str)
+
+    def showTime(self):
+        currentTime = QTime.currentTime()
+        self.ui.timeC_label.setText(currentTime.toString('hh:mm:ss'))
+        if(len(self.x) >= 150):
+            self.time = self.time.addSecs(1)
+            self.ui.timeL_label.setText(self.time.toString('hh:mm:ss'))
+
+    def getChConfig(self, flag):
+        if(flag):
+            #print('Getting Config')
+            try:
+                cfgFile = glob.glob(self.diretorio[0] + r'/*_config*')
+                with open(cfgFile[0], 'r') as f:
+                    firstLine = f.readline()
+
+                self.chGains = firstLine.split(';')
+
+            except:
+                print('Config File not found!')
+        else:
+            pass
+
+    # CHANGE THIS TO ANOTHER .py FILE TO HANDLE ONLY CHANNEL CONFIG
+    def chConfigDisp(self):
+        currentCh = int(self.ui.combo_chSelect.currentText())
+        self.ui.plainTextEdit_ChSettings.setPlainText('Current Selected Channel:\t' + str(currentCh) + '\n')
+        self.ui.plainTextEdit_ChSettings.appendPlainText('Auto-Gain Setting:\t' + self.chGains[currentCh-1])
+
+    ########################################################################
+    ## END ==> UTILITY FUNCTIONS
+    ############################## ---/--/--- ##############################
 
     ########################################################################
     ## START ==> APP EVENTS
@@ -401,6 +424,7 @@ class MySignal(QtCore.QObject):
     sig_start_acq = QtCore.Signal(bool)
     sig_with_str = QtCore.Signal(str)
     sig_dataPlot = QtCore.Signal(bool)
+    sig_getCfg = QtCore.Signal(bool)
 
 ########################################################################
 ## PLOTTING FUNCTIONS
