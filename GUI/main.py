@@ -362,6 +362,7 @@ class MainWindow(QMainWindow):
                     firstLine = f.readline()
 
                 self.chGains = firstLine.split(';')
+                self.chConfigDisp()
 
             except:
                 print('Config File not found!')

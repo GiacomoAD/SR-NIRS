@@ -18,7 +18,7 @@ class USBFunctions():
        self.threadAlive = False
        self.isLooking = False
        self.ser.baudrate = 115200
-       self.ser.timeout = 0.5
+       self.ser.timeout = 1
        self.bufferIn = ''
        self.vet = vetor
        self.configFlag = False
@@ -35,7 +35,6 @@ class USBFunctions():
         self.ser.port = port
         try:
             self.ser.open()
-            self.signal2.emit(True)
         except:
             self.signal.emit('Could not find device. Check USB connection')
             self.signal2.emit(False)
@@ -43,9 +42,12 @@ class USBFunctions():
         self.signal.emit('\n'+ str(port) + " is connected to Serial Line.\n Waiting for START SIGNAL")
         print(port + " is connected to Serial Line")
         
-        while self.ser.in_waiting:  # Or: while ser.inWaiting():
-            print('waiting')
-            print(self.ser.readline())
+        self.waitingThread = Thread(target=self.waitForBT, args=())
+        self.waitingThread.start()
+        
+        # while self.ser.in_waiting:  # Or: while ser.inWaiting():
+        #     print('waiting')
+        #     print(self.ser.readline())
         
         return 1
 
@@ -85,6 +87,8 @@ class USBFunctions():
         try:
             incBuffer = self.ser.readline()
             incBuffer = incBuffer.decode('utf-8')
+            print(incBuffer)
+
 
             if(incBuffer == 'BTSTART\n'):
                 return True
@@ -115,6 +119,7 @@ class USBFunctions():
 
 
     def keepReading(self, console_signal):
+        
         start_write_thread = 1
         lines_read = 0
 
@@ -142,6 +147,7 @@ class USBFunctions():
                 if(start_write_thread == 1 and len(self.vet) >= 500):
                     
                     start_write_thread = 0
+                    self.threadAlive = True
                     self.writingThread = Thread(target=self.threadedWriteFile)
                     self.writingThread.daemon = True
                     self.writingThread.start()
@@ -186,10 +192,6 @@ class USBFunctions():
                 time.sleep(2)
 
         
-            
-                    
- 
-
     def threadedFindDevice(self):
         first_flag = False
         while True:
@@ -212,3 +214,25 @@ class USBFunctions():
 
             if(self.isLooking == False):
                 break
+
+    def waitForBT(self):
+        self.signal2.emit(False)
+        waitFlag = True
+
+        while(waitFlag):
+            try:
+                data = self.ser.readline()
+                data = data.decode('utf-8')
+                
+            except:
+                pass
+            
+            if(data == '#R\n'):
+                self.ser.write(b'>')
+                waitFlag = False
+
+        self.signal.emit("\n Bluetooth Connected!")
+        time.sleep(1)
+        self.ser.reset_input_buffer()
+        self.signal2.emit(True)
+        return
