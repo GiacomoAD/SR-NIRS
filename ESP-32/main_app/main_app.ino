@@ -138,7 +138,18 @@ void setup()
   if (DEBUG)
   {
     Serial.println("Setup OK!");
+  } 
+
+
+  while(start_flag == 0){
+    ESP_BT.printf("#R\n");
+    if(ESP_BT.available()){
+      ESP_BT.readBytesUntil('>', bufferIn, 255);
+      start_flag = 1;
+    }
+    yield();
   }
+  start_flag = 0;
 
   Wire.setClock(400000); // Setting I2C clock speed to 400 kHz
 
