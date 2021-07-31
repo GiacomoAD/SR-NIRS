@@ -8,11 +8,11 @@
 
 #include <Adafruit_ADS1X15.h>
 #include <Wire.h>
-#include "BluetoothSerial.h"
 
 #include <DroneTimer.h>
 #include <NIRSFilter.h>
 #include <SRsensor.h>
+#include <SRBluetooth.h>
 
 /*SET DEBUG TO 1 TO ENABLE SERIAL MONITOR PRINTS*/
 #define DEBUG 0
@@ -33,7 +33,7 @@
 /*IMPORTED CLASSES OBJECTS*/
 DroneTimer timer;       // ESP-32 timer
 SRSensor NIRSsensor;    // NIRS Sensor
-BluetoothSerial ESP_BT; // Bluetooth comm
+SRBluetooth NIRSBt;     // Bluetooth comm
 
 /************ TIMER VARIABLES ***********/
 volatile unsigned char timer_flag = 0;
@@ -71,14 +71,7 @@ unsigned char flagMeans = MEANVAL;
 
 /************** BLUETOOTH CONN VARIABLES *************/
 int packets = 0; //
-
-char *pin = "1234"; // Bluetooth connection security PIN
-
-char bufferIn[256] = {'\0'};    // Incoming bluetooth message buffer
-unsigned char start_flag = 0;   // System start flag
 unsigned char packet_ready = 0; // Flag for ready to send packets
-unsigned char connected_flag = 0;
-uint8_t address1[6] = {0x98, 0xD3, 0x31, 0xF9, 0x87, 0x94};    // 98D3:31:F98794
 char *message_packet = (char *)calloc(MAX_SIZE, sizeof(char)); // Outgoing bluetooth message buffer
 
 /********** END OF BLUETOOTH CONN VARIABLES **********/
@@ -115,54 +108,12 @@ void setup()
   timer.initTimer(6 * FREQUENCY, &timerInterrupt);
 
   /* Setting up Bluetooth Connection*/
-  ESP_BT.begin("ESP32", true);               //name of Bluetooth Device
-  ESP_BT.setPin(pin);                        // Setting security PIN
+  NIRSBt.initBt();
 
   /*Connecting to Bluetooth HC-05 antenna*/
-  connected_flag = ESP_BT.connect(address1); // Connecting to specific address
-  if (connected_flag)
-  {
-    if (DEBUG)
-      Serial.println("Connected Succesfully!");
-  }
-
-  else
-  {
-    while (!ESP_BT.connected(10000))
-    {
-      if (DEBUG)
-        Serial.println("Failed to connect. Make sure remote device is available and in range, then restart app.");
-    }
-  }
-
-  if (DEBUG)
-  {
-    Serial.println("Setup OK!");
-  } 
-
-
-  while(start_flag == 0){
-    ESP_BT.printf("#R\n");
-    if(ESP_BT.available()){
-      ESP_BT.readBytesUntil('>', bufferIn, 255);
-      start_flag = 1;
-    }
-    yield();
-  }
-  start_flag = 0;
+  NIRSBt.connect();
 
   Wire.setClock(400000); // Setting I2C clock speed to 400 kHz
-
-
-  /*Waiting for GUI start signal*/
-  while(start_flag == 0){
-      if(ESP_BT.available()){
-        ESP_BT.readBytesUntil('>', bufferIn, 255);
-        start_flag = 1;
-        ESP_BT.printf("BTSTART\n\0");
-      }
-      yield();
-  }
 
   /*Switching to IR to calibrate*/
   NIRSsensor.switchIR();
@@ -193,8 +144,8 @@ void setup()
   }
 
   /*Sending configuration message over Bluetooth*/
-  ESP_BT.printf("#C%d;%d;%d\n\0", NIRSsensor.chGains[0], NIRSsensor.chGains[1], NIRSsensor.chGains[2]); /*Auto gain settings*/
-  ESP_BT.printf("%s", message_packet); /*Sending all means by channel*/
+  NIRSBt.sendGains(NIRSsensor.chGains); /*Auto gain settings*/
+  NIRSBt.sendData(message_packet); /*Sending all means by channel*/
   message_packet[0] = '\0';
 
   /*Resetting time variable to timestamp*/
@@ -242,7 +193,7 @@ void loop()
   /* If the packet ready to send */
   if(packet_ready){
     packet_ready = 0; // Resetting flag
-    ESP_BT.printf("%s", message_packet);  // Sending outgoing buffer through Bluetooth
+    NIRSBt.sendData(message_packet);  // Sending outgoing buffer through Bluetooth
     message_packet[0] = '\0';
   }
 
