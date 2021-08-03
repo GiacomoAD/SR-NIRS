@@ -41,7 +41,7 @@ from pathlib import Path
 # GUI FILE
 from app_modules import *
 
-CH_NUMBER = 3
+#CH_NUMBER = 3
 
 class MplCanvas(FigureCanvasQTAgg):
     def __init__(self, parent=None, width=5, height=4, dpi=100):
@@ -146,17 +146,19 @@ class MainWindow(QMainWindow):
         self.ui.horizontalSlider_2.valueChanged[int].connect(lambda: UIFunctions.sliderChange(self, self.ui.horizontalSlider_2.value(),1))
         self.ui.horizontalSlider_3.valueChanged[int].connect(lambda: UIFunctions.sliderChange(self, self.ui.horizontalSlider_3.value(),2))
 
+        self.ui.lineEdit_2.returnPressed.connect(lambda: chPlotDisp(self.ui.lineEdit_2, self.activeChannels)) # Current Channel Display
+
         ##CONNECTION PAGE BUTTONS CALLBACKS
-        self.ui.button_start_server.clicked.connect(lambda: ServerFunctions.startServer(ServerFunctions, self.signal.sig_with_str))
+        #self.ui.button_start_server.clicked.connect(lambda: ServerFunctions.startServer(ServerFunctions, self.signal.sig_with_str))
         self.ui.radioButton_3.toggled.connect(lambda: self.radioCheck())
         
         self.ui.button_start_acq.clicked.connect(lambda: self.USBhandler.startUSBacquisiton())
         #self.ui.button_start_acq.clicked.connect(lambda: self.BThandler.startBTacquisiton())
         
-        self.ui.button_chooseFolder.clicked.connect(lambda: self.chooseFolder())
+        self.ui.button_chooseFolder.clicked.connect(lambda: chooseFolder(self.diretorio, self.ui.lineEd_chooseFolder))
 
         ##CONNECTING TRIGGER BUTTON CALLBACK
-        self.ui.button_trigger.clicked.connect(lambda: self.saveTrigger())
+        self.ui.button_trigger.clicked.connect(lambda: saveTrigger(self.time, self.diretorio))
 
         ## ==> MOVE WINDOW / MAXIMIZE / RESTORE
         ########################################################################
@@ -209,6 +211,9 @@ class MainWindow(QMainWindow):
         self.plt_colors = ['r','b','g','y','c','m','w', 'r--','b--','g--','y--','c--','m--','w--','r','b','g','y','c','m','w', 'r--','b--','g--','y--','c--','m--','w--']                      #Colors can also be hexstring code -- THIS IS CURRENTLY A PLACEHOLDER
         self.ln = [self.canvas1.ax1.plot([], [], self.plt_colors[i]) for i in range(2*self.ch_number)]
         
+        self.activeChannels = [0 for ch in range(1,CH_NUMBER+1)]
+        self.activeChannels[0] = 1
+
         self.threadFlag = []
         self.threadFlag.append(True)
 
@@ -224,6 +229,14 @@ class MainWindow(QMainWindow):
 
         self.ui.gridLayout_5.addWidget(self.canvas2, 0, 1, 1, 1)
    
+
+        ## CHANNEL CONFIG COMBO BOX
+        for i in range(1,self.ch_number+1):
+            self.ui.combo_chSelect.addItem(str(i))
+
+        self.ui.combo_chSelect.currentIndexChanged.connect(lambda: chConfigDisp(self.ui.combo_chSelect, self.ui.plainTextEdit_ChSettings, self.chGains))
+        chConfigDisp(self.ui.combo_chSelect, self.ui.plainTextEdit_ChSettings, self.chGains)
+
         ########################################################################
         #                                                                      #
         ## END --------------- WIDGETS FUNCTIONS/PARAMETERS ----------------- ##
@@ -235,16 +248,12 @@ class MainWindow(QMainWindow):
         self.show()
         ## ==> END ##
 
-        ## CHANNEL CONFIG COMBO BOX
-        for i in range(1,self.ch_number+1):
-            self.ui.combo_chSelect.addItem(str(i))
-
-        self.ui.combo_chSelect.currentIndexChanged.connect(lambda: self.chConfigDisp())
-        self.chConfigDisp()
+        
 
     ########################################################################
     ## MENUS ==> DYNAMIC MENUS FUNCTIONS
     ########################################################################
+
 
     def radioCheck(self):
         if(self.ui.radioButton_3.isChecked()):
@@ -252,14 +261,6 @@ class MainWindow(QMainWindow):
             self.USBhandler.isLooking = True
             self.USBhandler.findDevices()
 
-            #self.BThandler.isLooking = True
-            #self.BThandler.findDevices()
-
-            
-            # if(self.USBhandler.listDevices()):
-            #     self.ui.button_start_acq.setEnabled(True)
-            # else:
-            #     self.ui.button_start_acq.setEnabled(False)
             #TURNING OFF WIFI BUTTONS
             self.ui.button_start_server.setEnabled(False)
             self.ui.button_connect_server.setEnabled(False)
@@ -267,13 +268,11 @@ class MainWindow(QMainWindow):
         else:
             self.USBhandler.isLooking = False
 
-            #self.BThandler.isLooking = False
             self.ui.button_start_server.setEnabled(True)
             self.ui.button_connect_server.setEnabled(True)
             self.ui.plainTextEdit_2.clear()
             try:
                 self.USBhandler.disconnect()
-                #self.BThandler.disconnect()
             except:
                 pass
 
@@ -286,31 +285,9 @@ class MainWindow(QMainWindow):
         self.threadFlag[0] = flag
         readFromFile(self.xnp, self.y, self.threadFlag, self)
 
-    def saveTrigger(self):
-        tempo = self.time.toString('hh:mm:ss')
-        tempo = tempo.split(':')
-
-        self.trigger_path = self.diretorio[0] + '/' + 'Triggers.txt'
-
-        with open(self.trigger_path, "a+") as f:
-            f.write(str(60*int(tempo[1]) + int(tempo[2])) + '\n')
-        pass
-
-        print(60*int(tempo[1]) + int(tempo[2]))
-
-    def chooseFolder(self):
-        self.diretorio[0] = QtWidgets.QFileDialog.getExistingDirectory(None, 'Select a folder:', 'C:\\', QtWidgets.QFileDialog.ShowDirsOnly)
-        
-        if self.diretorio[0] == '':
-            self.diretorio[0] = os.getcwd()
-            self.diretorio[0] = self.diretorio[0].replace('\\','/')
-
-        self.ui.lineEd_chooseFolder.setText(self.diretorio[0])
-
     def Button(self):
         # GET BT CLICKED
         btnWidget = self.sender()
-        print(self.configOn)
 
         # PAGE HOME
         if btnWidget.objectName() == "btn_home":
@@ -342,7 +319,7 @@ class MainWindow(QMainWindow):
     def print_console_log(self, str):
 
         if(str == '#C'):
-            self.ui.plainTextEdit_2.setPlainText('')
+            self.ui.plainTextEdit_2.clear()
         else:
             self.ui.plainTextEdit_2.setPlainText( self.ui.plainTextEdit_2.toPlainText() + str)
 
@@ -369,11 +346,6 @@ class MainWindow(QMainWindow):
         else:
             pass
 
-    # CHANGE THIS TO ANOTHER .py FILE TO HANDLE ONLY CHANNEL CONFIG
-    def chConfigDisp(self):
-        currentCh = int(self.ui.combo_chSelect.currentText())
-        self.ui.plainTextEdit_ChSettings.setPlainText('Current Selected Channel:\t' + str(currentCh) + '\n')
-        self.ui.plainTextEdit_ChSettings.appendPlainText('Auto-Gain Setting:\t' + self.chGains[currentCh-1])
 
     ########################################################################
     ## END ==> UTILITY FUNCTIONS
