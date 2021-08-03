@@ -163,23 +163,20 @@ def gen_animate(window):
 def animate_plot(value, ln, window):
     # This function takes the value yieldded by gen_animate and appends it to the lines being plotted.
     # value is the structured (time, Internsity) data.
-    # print(value)
-
-    #tempo = np.asarray(value[0])
-    ch1IR = (value[1][0])
-    ch1R = (value[1][1])
-
-    ch2IR = (value[1][2])
-    ch2R = (value[1][3])
-
-    ch3IR = (value[1][4])
-    ch3R = (value[1][5])
 
     r_gain = float(window.ui.label_14.text())
     ir_gain = float(window.ui.label_13.text())
 
-    ln[0][0].set_data(value[0], ch1IR*ir_gain)
-    ln[1][0].set_data(value[0], ch1R*r_gain)
+    #ln[0][0].set_data(value[0], ch1IR*ir_gain)
+    #ln[1][0].set_data(value[0], ch1R*r_gain)
+
+    for i in range(len(window.activeChannels)):
+        if window.activeChannels[i] == 1:
+            ln[2*i][0].set_data(value[0], value[1][2*i])
+            ln[2*i+1][0].set_data(value[0], value[1][2*i+1])
+            
+        else:
+            pass
 
 
     return ln,
