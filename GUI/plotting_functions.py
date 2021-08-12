@@ -78,7 +78,16 @@ def gen_animate(window):
     t_max = 5
     window.canvas1.ax1.set_xlim([t_min, t_max])
 
-    autoscale_points = []
+    autoscale_mult = []
+    for i in range(2*NUMBER_OF_CHANNELS):
+        autoscale_mult.append([0])
+
+    currMax = 0
+    currMin = 0
+
+    maxAtt = 0
+    minAtt = 0
+
     autoscale_y_axis = False
     new_points_flag = False
 
@@ -91,21 +100,21 @@ def gen_animate(window):
 
                 plot_time_buffer = np.append(plot_time_buffer, window.xnp[j:j+cte])
 
-                plot_data_buffer[0] = np.append(plot_data_buffer[0], window.ynp[0][j:j+cte]) #Ch1 - IR
-                plot_data_buffer[1] = np.append(plot_data_buffer[1], window.ynp[1][j:j+cte]) #Ch1 - R
-                plot_data_buffer[2] = np.append(plot_data_buffer[2], window.ynp[2][j:j+cte]) #Ch2 - IR
-                plot_data_buffer[3] = np.append(plot_data_buffer[3], window.ynp[3][j:j+cte]) #Ch2 - R
-                plot_data_buffer[4] = np.append(plot_data_buffer[4], window.ynp[4][j:j+cte]) #Ch3 - IR
-                plot_data_buffer[5] = np.append(plot_data_buffer[5], window.ynp[5][j:j+cte]) #Ch3 - R
-                
-
+                for i in range(NUMBER_OF_CHANNELS):
+                    plot_data_buffer[2*i] = np.append(plot_data_buffer[2*i], window.ynp[2*i][j:j+cte])
+                    plot_data_buffer[2*i+1] = np.append(plot_data_buffer[2*i+1], window.ynp[2*i+1][j:j+cte])
+                    
 
                 j = len(plot_time_buffer)
                 new_points_flag = True
 
-                if len(autoscale_points) < 100:
-                    autoscale_points.extend(plot_data_buffer[0][-10:])
+                if len(autoscale_mult[0]) < 100:
                     autoscale_y_axis = True
+
+                    for ch in range(2*NUMBER_OF_CHANNELS):
+                        autoscale_mult[ch].extend(plot_data_buffer[ch][-10:])
+                    
+
 
             else:
                 pass
@@ -132,9 +141,33 @@ def gen_animate(window):
         try:
             if autoscale_y_axis == True and new_points_flag == True:
                 new_points_flag = False
-                del autoscale_points[0:25]
-                autoscale_points.extend(plot_data_buffer[0][-25:])
-                window.canvas1.ax1.set_ylim([np.amin(autoscale_points), np.amax(autoscale_points)])
+
+                firstChFlag = True
+
+                for ch in range(2*NUMBER_OF_CHANNELS):
+                    del autoscale_mult[ch][0:25]
+                    autoscale_mult[ch].extend(plot_data_buffer[ch][-25:])
+
+                for i in range(NUMBER_OF_CHANNELS):
+                    if window.activeChannels[i] == 1:
+                        if firstChFlag:
+                            currMax = np.amax(autoscale_mult[2*i])
+                            currMin = np.amin(autoscale_mult[2*i+1])
+                            maxAtt = currMax
+                            minAtt = currMin
+                            firstChFlag = False
+
+                        else:
+                            currMax = np.amax(autoscale_mult[2*i])
+                            currMin = np.amin(autoscale_mult[2*i+1])
+
+                        if currMax >= maxAtt:
+                            maxAtt = currMax
+
+                        if currMin <= minAtt:
+                            minAtt = currMin
+                
+                window.canvas1.ax1.set_ylim([minAtt, maxAtt])
 
         except Exception as e:
             #print(e)
@@ -177,7 +210,6 @@ def animate_plot(value, ln, window):
             
         else:
             pass
-
 
     return ln,
 
