@@ -23,12 +23,12 @@ def chooseFolder(diretorio, lineEd_chooseFolder):
 ###################################################
     ######## MONITORING PAGE FUNCTIONS ########
 ###################################################
+
+
 def chConfigDisp(combo_chSelect, plainTextEdit_ChSettings, chGains):
     currentCh = combo_chSelect.currentText()
     plainTextEdit_ChSettings.setPlainText('Current Selected Channel:\t' + currentCh + '\n')
     plainTextEdit_ChSettings.appendPlainText('Auto-Gain Setting:\t' + chGains[int(currentCh)-1])
-
-
 
 def saveTrigger(time, diretorio):
         tempo = time.toString('hh:mm:ss')
@@ -59,14 +59,16 @@ def chPlotDisp(lineEdit_2, activeChannels):
                     [int(item) for item in text]
                     startingCh = int(text[0]) - 1 
                     endingCh = int(text[-1])
-                    activeChannels = [0 for ch in range(1,CH_NUMBER+1)]
+                    for i in range(CH_NUMBER):
+                            activeChannels[i] = 0
                     for ch in range(startingCh, endingCh):
                         activeChannels[ch] = 1
                     
                     print(activeChannels)
                 
                 except:
-                    activeChannels = [0 for ch in range(1,CH_NUMBER+1)]
+                    for i in range(CH_NUMBER):
+                            activeChannels[i] = 0
                     activeChannels[0] = 1
                     print('Invalid Input!')
                 
@@ -77,14 +79,16 @@ def chPlotDisp(lineEdit_2, activeChannels):
                 try:
                     [int(item) for item in text]
 
-                    activeChannels = [0 for ch in range(1,CH_NUMBER+1)]
+                    for i in range(CH_NUMBER):
+                            activeChannels[i] = 0
                     for ch in range(len(text)):
                         activeChannels[int(text[ch])-1] = 1
 
                     print(activeChannels)
 
                 except:
-                    activeChannels = [0 for ch in range(1,CH_NUMBER+1)]
+                    for i in range(CH_NUMBER):
+                            activeChannels[i] = 0
                     activeChannels[0] = 1
                     print('Invalid Input!')
             
@@ -93,14 +97,16 @@ def chPlotDisp(lineEdit_2, activeChannels):
                     text = int(text)
                     
                     if text <= CH_NUMBER and text != 0:
-                        activeChannels = [0 for ch in range(1,CH_NUMBER+1)]
+                        for i in range(CH_NUMBER):
+                            activeChannels[i] = 0
                         activeChannels[text-1] = 1
 
                         print(activeChannels)
                         
 
                     else:
-                        activeChannels = [0 for ch in range(1,CH_NUMBER+1)]
+                        for i in range(CH_NUMBER):
+                            activeChannels[i] = 0
                         activeChannels[0] = 1
                         print('Invalid channel!')
 
