@@ -3,7 +3,7 @@
 /* File description: SR-NIRS sensor main app                         */
 /* Author name:      Giacomo Dollevedo                               */
 /* Creation date:    30Jun2021                                       */
-/* Revision date:    27Jul2021                                       */
+/* Revision date:    01Aug2021                                       */
 /* ***************************************************************** */
 
 #include <Adafruit_ADS1X15.h>
@@ -22,6 +22,7 @@
 #define N_GAIN 8
 #define MEANVAL 1
 #define N_DET 3
+#define MIDRANGE 12800
 
 /*DATA ACQUISITION FREQUENCY*/
 #define FREQUENCY 50
@@ -266,7 +267,7 @@ void calibrate(){
 
   for(int i=0;i<N_DET;i++){
     for(int j=0;j<N_GAIN;j++){
-      testComp[i][j] = means[i][j] - 15000;
+      testComp[i][j] = means[i][j] - MIDRANGE;
     }
   }
 
