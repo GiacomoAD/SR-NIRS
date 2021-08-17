@@ -18243,8 +18243,8 @@ http://www.zetex.com&lt;p&gt;
 <attribute name="NAME" x="13.97" y="85.725" size="1.778" layer="95" rot="R180"/>
 <attribute name="VALUE" x="13.97" y="121.92" size="1.778" layer="96" rot="R180"/>
 </instance>
-<instance part="SUPPLY10" gate="GND" x="27.94" y="88.9" smashed="yes">
-<attribute name="VALUE" x="26.035" y="85.725" size="1.778" layer="96"/>
+<instance part="SUPPLY10" gate="GND" x="27.94" y="91.44" smashed="yes">
+<attribute name="VALUE" x="26.035" y="88.265" size="1.778" layer="96"/>
 </instance>
 <instance part="C2" gate="G$1" x="38.1" y="91.44" smashed="yes">
 <attribute name="NAME" x="39.116" y="92.075" size="1.778" layer="95"/>
@@ -18449,11 +18449,6 @@ http://www.zetex.com&lt;p&gt;
 <junction x="87.376" y="70.104"/>
 </segment>
 <segment>
-<wire x1="10.16" y1="91.44" x2="27.94" y2="91.44" width="0.1524" layer="91"/>
-<pinref part="SUPPLY10" gate="GND" pin="GND"/>
-<pinref part="JP3" gate="G$1" pin="2"/>
-</segment>
-<segment>
 <pinref part="SUPPLY11" gate="GND" pin="GND"/>
 <pinref part="C2" gate="G$1" pin="2"/>
 <wire x1="38.1" y1="83.82" x2="38.1" y2="86.36" width="0.1524" layer="91"/>
@@ -18470,6 +18465,11 @@ http://www.zetex.com&lt;p&gt;
 <wire x1="24.13" y1="75.438" x2="24.13" y2="73.66" width="0.1524" layer="91"/>
 <wire x1="24.13" y1="73.66" x2="17.78" y2="73.66" width="0.1524" layer="91"/>
 <junction x="17.78" y="73.66"/>
+</segment>
+<segment>
+<pinref part="JP3" gate="G$1" pin="3"/>
+<pinref part="SUPPLY10" gate="GND" pin="GND"/>
+<wire x1="10.16" y1="93.98" x2="27.94" y2="93.98" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="OUT" class="0">
@@ -18654,14 +18654,16 @@ http://www.zetex.com&lt;p&gt;
 <label x="-20.32" y="-5.08" size="1.778" layer="95"/>
 </segment>
 <segment>
-<label x="20.066" y="94.742" size="1.778" layer="95"/>
+<label x="42.926" y="97.282" size="1.778" layer="95"/>
 <pinref part="C2" gate="G$1" pin="1"/>
-<wire x1="10.16" y1="93.98" x2="38.1" y2="93.98" width="0.1524" layer="91"/>
 <pinref part="C5" gate="G$1" pin="+"/>
 <wire x1="47.752" y1="93.726" x2="47.752" y2="93.98" width="0.1524" layer="91"/>
 <wire x1="47.752" y1="93.98" x2="38.1" y2="93.98" width="0.1524" layer="91"/>
+<wire x1="38.1" y1="93.98" x2="30.48" y2="93.98" width="0.1524" layer="91"/>
 <junction x="38.1" y="93.98"/>
-<pinref part="JP3" gate="G$1" pin="3"/>
+<wire x1="30.48" y1="93.98" x2="30.48" y2="91.44" width="0.1524" layer="91"/>
+<pinref part="JP3" gate="G$1" pin="2"/>
+<wire x1="30.48" y1="91.44" x2="10.16" y2="91.44" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="DET3" class="0">
