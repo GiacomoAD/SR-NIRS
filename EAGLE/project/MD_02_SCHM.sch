@@ -357,141 +357,6 @@ NS Package M08A</description>
 </deviceset>
 </devicesets>
 </library>
-<library name="SamacSys_Parts">
-<description>&lt;b&gt;https://componentsearchengine.com&lt;/b&gt;&lt;p&gt;
-&lt;author&gt;Created by SamacSys&lt;/author&gt;</description>
-<packages>
-<package name="SOIC127P1030X265-24N">
-<description>&lt;b&gt;CD74HC4067M96&lt;/b&gt;&lt;br&gt;
-</description>
-<smd name="1" x="-4.725" y="6.985" dx="1.95" dy="0.65" layer="1"/>
-<smd name="2" x="-4.725" y="5.715" dx="1.95" dy="0.65" layer="1"/>
-<smd name="3" x="-4.725" y="4.445" dx="1.95" dy="0.65" layer="1"/>
-<smd name="4" x="-4.725" y="3.175" dx="1.95" dy="0.65" layer="1"/>
-<smd name="5" x="-4.725" y="1.905" dx="1.95" dy="0.65" layer="1"/>
-<smd name="6" x="-4.725" y="0.635" dx="1.95" dy="0.65" layer="1"/>
-<smd name="7" x="-4.725" y="-0.635" dx="1.95" dy="0.65" layer="1"/>
-<smd name="8" x="-4.725" y="-1.905" dx="1.95" dy="0.65" layer="1"/>
-<smd name="9" x="-4.725" y="-3.175" dx="1.95" dy="0.65" layer="1"/>
-<smd name="10" x="-4.725" y="-4.445" dx="1.95" dy="0.65" layer="1"/>
-<smd name="11" x="-4.725" y="-5.715" dx="1.95" dy="0.65" layer="1"/>
-<smd name="12" x="-4.725" y="-6.985" dx="1.95" dy="0.65" layer="1"/>
-<smd name="13" x="4.725" y="-6.985" dx="1.95" dy="0.65" layer="1"/>
-<smd name="14" x="4.725" y="-5.715" dx="1.95" dy="0.65" layer="1"/>
-<smd name="15" x="4.725" y="-4.445" dx="1.95" dy="0.65" layer="1"/>
-<smd name="16" x="4.725" y="-3.175" dx="1.95" dy="0.65" layer="1"/>
-<smd name="17" x="4.725" y="-1.905" dx="1.95" dy="0.65" layer="1"/>
-<smd name="18" x="4.725" y="-0.635" dx="1.95" dy="0.65" layer="1"/>
-<smd name="19" x="4.725" y="0.635" dx="1.95" dy="0.65" layer="1"/>
-<smd name="20" x="4.725" y="1.905" dx="1.95" dy="0.65" layer="1"/>
-<smd name="21" x="4.725" y="3.175" dx="1.95" dy="0.65" layer="1"/>
-<smd name="22" x="4.725" y="4.445" dx="1.95" dy="0.65" layer="1"/>
-<smd name="23" x="4.725" y="5.715" dx="1.95" dy="0.65" layer="1"/>
-<smd name="24" x="4.725" y="6.985" dx="1.95" dy="0.65" layer="1"/>
-<text x="0" y="0" size="1.27" layer="25" align="center">&gt;NAME</text>
-<text x="0" y="0" size="1.27" layer="27" align="center">&gt;VALUE</text>
-<wire x1="-5.95" y1="8.05" x2="5.95" y2="8.05" width="0.05" layer="51"/>
-<wire x1="5.95" y1="8.05" x2="5.95" y2="-8.05" width="0.05" layer="51"/>
-<wire x1="5.95" y1="-8.05" x2="-5.95" y2="-8.05" width="0.05" layer="51"/>
-<wire x1="-5.95" y1="-8.05" x2="-5.95" y2="8.05" width="0.05" layer="51"/>
-<wire x1="-3.75" y1="7.7" x2="3.75" y2="7.7" width="0.1" layer="51"/>
-<wire x1="3.75" y1="7.7" x2="3.75" y2="-7.7" width="0.1" layer="51"/>
-<wire x1="3.75" y1="-7.7" x2="-3.75" y2="-7.7" width="0.1" layer="51"/>
-<wire x1="-3.75" y1="-7.7" x2="-3.75" y2="7.7" width="0.1" layer="51"/>
-<wire x1="-3.75" y1="6.43" x2="-2.48" y2="7.7" width="0.1" layer="51"/>
-<wire x1="-3.4" y1="7.7" x2="3.4" y2="7.7" width="0.2" layer="21"/>
-<wire x1="3.4" y1="7.7" x2="3.4" y2="-7.7" width="0.2" layer="21"/>
-<wire x1="3.4" y1="-7.7" x2="-3.4" y2="-7.7" width="0.2" layer="21"/>
-<wire x1="-3.4" y1="-7.7" x2="-3.4" y2="7.7" width="0.2" layer="21"/>
-<wire x1="-5.7" y1="7.66" x2="-3.75" y2="7.66" width="0.2" layer="21"/>
-</package>
-</packages>
-<symbols>
-<symbol name="CD74HC4067M96E4">
-<wire x1="5.08" y1="2.54" x2="40.64" y2="2.54" width="0.254" layer="94"/>
-<wire x1="40.64" y1="-30.48" x2="40.64" y2="2.54" width="0.254" layer="94"/>
-<wire x1="40.64" y1="-30.48" x2="5.08" y2="-30.48" width="0.254" layer="94"/>
-<wire x1="5.08" y1="2.54" x2="5.08" y2="-30.48" width="0.254" layer="94"/>
-<text x="41.91" y="7.62" size="1.778" layer="95" align="center-left">&gt;NAME</text>
-<text x="41.91" y="5.08" size="1.778" layer="96" align="center-left">&gt;VALUE</text>
-<pin name="COMMON_INPUT/OUTPUT" x="0" y="0" length="middle"/>
-<pin name="I7" x="0" y="-2.54" length="middle"/>
-<pin name="I6" x="0" y="-5.08" length="middle"/>
-<pin name="I5" x="0" y="-7.62" length="middle"/>
-<pin name="I4" x="0" y="-10.16" length="middle"/>
-<pin name="I3" x="0" y="-12.7" length="middle"/>
-<pin name="I2" x="0" y="-15.24" length="middle"/>
-<pin name="I1" x="0" y="-17.78" length="middle"/>
-<pin name="I0" x="0" y="-20.32" length="middle"/>
-<pin name="S0" x="0" y="-22.86" length="middle"/>
-<pin name="S1" x="0" y="-25.4" length="middle"/>
-<pin name="GND" x="0" y="-27.94" length="middle"/>
-<pin name="VCC" x="45.72" y="0" length="middle" rot="R180"/>
-<pin name="I8" x="45.72" y="-2.54" length="middle" rot="R180"/>
-<pin name="I9" x="45.72" y="-5.08" length="middle" rot="R180"/>
-<pin name="I10" x="45.72" y="-7.62" length="middle" rot="R180"/>
-<pin name="I11" x="45.72" y="-10.16" length="middle" rot="R180"/>
-<pin name="I12" x="45.72" y="-12.7" length="middle" rot="R180"/>
-<pin name="I13" x="45.72" y="-15.24" length="middle" rot="R180"/>
-<pin name="I14" x="45.72" y="-17.78" length="middle" rot="R180"/>
-<pin name="I15" x="45.72" y="-20.32" length="middle" rot="R180"/>
-<pin name="!E" x="45.72" y="-22.86" length="middle" rot="R180"/>
-<pin name="S2" x="45.72" y="-25.4" length="middle" rot="R180"/>
-<pin name="S3" x="45.72" y="-27.94" length="middle" rot="R180"/>
-</symbol>
-</symbols>
-<devicesets>
-<deviceset name="CD74HC4067M96E4" prefix="IC">
-<description>&lt;b&gt;Multiplexer Switch ICs Hi-Spd CMOS 16Ch Anl Mltplxr/Demltplxr&lt;/b&gt;&lt;p&gt;
-Source: &lt;a href="http://www.ti.com/general/docs/suppproductinfo.tsp?distId=10&amp;gotoUrl=http://www.ti.com/lit/gpn/cd74hc4067"&gt; Datasheet &lt;/a&gt;</description>
-<gates>
-<gate name="G$1" symbol="CD74HC4067M96E4" x="0" y="0"/>
-</gates>
-<devices>
-<device name="" package="SOIC127P1030X265-24N">
-<connects>
-<connect gate="G$1" pin="!E" pad="15"/>
-<connect gate="G$1" pin="COMMON_INPUT/OUTPUT" pad="1"/>
-<connect gate="G$1" pin="GND" pad="12"/>
-<connect gate="G$1" pin="I0" pad="9"/>
-<connect gate="G$1" pin="I1" pad="8"/>
-<connect gate="G$1" pin="I10" pad="21"/>
-<connect gate="G$1" pin="I11" pad="20"/>
-<connect gate="G$1" pin="I12" pad="19"/>
-<connect gate="G$1" pin="I13" pad="18"/>
-<connect gate="G$1" pin="I14" pad="17"/>
-<connect gate="G$1" pin="I15" pad="16"/>
-<connect gate="G$1" pin="I2" pad="7"/>
-<connect gate="G$1" pin="I3" pad="6"/>
-<connect gate="G$1" pin="I4" pad="5"/>
-<connect gate="G$1" pin="I5" pad="4"/>
-<connect gate="G$1" pin="I6" pad="3"/>
-<connect gate="G$1" pin="I7" pad="2"/>
-<connect gate="G$1" pin="I8" pad="23"/>
-<connect gate="G$1" pin="I9" pad="22"/>
-<connect gate="G$1" pin="S0" pad="10"/>
-<connect gate="G$1" pin="S1" pad="11"/>
-<connect gate="G$1" pin="S2" pad="14"/>
-<connect gate="G$1" pin="S3" pad="13"/>
-<connect gate="G$1" pin="VCC" pad="24"/>
-</connects>
-<technologies>
-<technology name="">
-<attribute name="ARROW_PART_NUMBER" value="CD74HC4067M96E4" constant="no"/>
-<attribute name="ARROW_PRICE-STOCK" value="https://www.arrow.com/en/products/cd74hc4067m96e4/texas-instruments" constant="no"/>
-<attribute name="DESCRIPTION" value="Multiplexer Switch ICs Hi-Spd CMOS 16Ch Anl Mltplxr/Demltplxr" constant="no"/>
-<attribute name="HEIGHT" value="2.65mm" constant="no"/>
-<attribute name="MANUFACTURER_NAME" value="Texas Instruments" constant="no"/>
-<attribute name="MANUFACTURER_PART_NUMBER" value="CD74HC4067M96E4" constant="no"/>
-<attribute name="MOUSER_PART_NUMBER" value="595-CD74HC4067M96E4" constant="no"/>
-<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.co.uk/ProductDetail/Texas-Instruments/CD74HC4067M96E4/?qs=xFfolx0DHx2BNhtubuadCQ%3D%3D" constant="no"/>
-</technology>
-</technologies>
-</device>
-</devices>
-</deviceset>
-</devicesets>
-</library>
 <library name="supply2" urn="urn:adsk.eagle:library:372">
 <description>&lt;b&gt;Supply Symbols&lt;/b&gt;&lt;p&gt;
 GND, VCC, 0V, +5V, -5V, etc.&lt;p&gt;
@@ -17981,6 +17846,141 @@ http://www.zetex.com&lt;p&gt;
 </deviceset>
 </devicesets>
 </library>
+<library name="CD74HC4067SM96">
+<description>&lt;High Speed CMOS 16-Ch MUX/DEMUX 24P SOIC CD74HC4067SM96, Multiplexer/Demultiplexer Single 16:1, 3 V, 5 V, 24-Pin, SSOP, 1&lt;/b&gt;&lt;p&gt;
+&lt;author&gt;Created by SamacSys&lt;/author&gt;</description>
+<packages>
+<package name="SOP65P780X200-24N">
+<description>&lt;b&gt;DB (R-PDSO-G)&lt;/b&gt;&lt;br&gt;
+</description>
+<smd name="1" x="-3.55" y="3.575" dx="1.8" dy="0.45" layer="1"/>
+<smd name="2" x="-3.55" y="2.925" dx="1.8" dy="0.45" layer="1"/>
+<smd name="3" x="-3.55" y="2.275" dx="1.8" dy="0.45" layer="1"/>
+<smd name="4" x="-3.55" y="1.625" dx="1.8" dy="0.45" layer="1"/>
+<smd name="5" x="-3.55" y="0.975" dx="1.8" dy="0.45" layer="1"/>
+<smd name="6" x="-3.55" y="0.325" dx="1.8" dy="0.45" layer="1"/>
+<smd name="7" x="-3.55" y="-0.325" dx="1.8" dy="0.45" layer="1"/>
+<smd name="8" x="-3.55" y="-0.975" dx="1.8" dy="0.45" layer="1"/>
+<smd name="9" x="-3.55" y="-1.625" dx="1.8" dy="0.45" layer="1"/>
+<smd name="10" x="-3.55" y="-2.275" dx="1.8" dy="0.45" layer="1"/>
+<smd name="11" x="-3.55" y="-2.925" dx="1.8" dy="0.45" layer="1"/>
+<smd name="12" x="-3.55" y="-3.575" dx="1.8" dy="0.45" layer="1"/>
+<smd name="13" x="3.55" y="-3.575" dx="1.8" dy="0.45" layer="1"/>
+<smd name="14" x="3.55" y="-2.925" dx="1.8" dy="0.45" layer="1"/>
+<smd name="15" x="3.55" y="-2.275" dx="1.8" dy="0.45" layer="1"/>
+<smd name="16" x="3.55" y="-1.625" dx="1.8" dy="0.45" layer="1"/>
+<smd name="17" x="3.55" y="-0.975" dx="1.8" dy="0.45" layer="1"/>
+<smd name="18" x="3.55" y="-0.325" dx="1.8" dy="0.45" layer="1"/>
+<smd name="19" x="3.55" y="0.325" dx="1.8" dy="0.45" layer="1"/>
+<smd name="20" x="3.55" y="0.975" dx="1.8" dy="0.45" layer="1"/>
+<smd name="21" x="3.55" y="1.625" dx="1.8" dy="0.45" layer="1"/>
+<smd name="22" x="3.55" y="2.275" dx="1.8" dy="0.45" layer="1"/>
+<smd name="23" x="3.55" y="2.925" dx="1.8" dy="0.45" layer="1"/>
+<smd name="24" x="3.55" y="3.575" dx="1.8" dy="0.45" layer="1"/>
+<text x="0" y="0" size="1.27" layer="25" align="center">&gt;NAME</text>
+<text x="0" y="0" size="1.27" layer="27" align="center">&gt;VALUE</text>
+<wire x1="-4.7" y1="4.5" x2="4.7" y2="4.5" width="0.05" layer="51"/>
+<wire x1="4.7" y1="4.5" x2="4.7" y2="-4.5" width="0.05" layer="51"/>
+<wire x1="4.7" y1="-4.5" x2="-4.7" y2="-4.5" width="0.05" layer="51"/>
+<wire x1="-4.7" y1="-4.5" x2="-4.7" y2="4.5" width="0.05" layer="51"/>
+<wire x1="-2.65" y1="4.1" x2="2.65" y2="4.1" width="0.1" layer="51"/>
+<wire x1="2.65" y1="4.1" x2="2.65" y2="-4.1" width="0.1" layer="51"/>
+<wire x1="2.65" y1="-4.1" x2="-2.65" y2="-4.1" width="0.1" layer="51"/>
+<wire x1="-2.65" y1="-4.1" x2="-2.65" y2="4.1" width="0.1" layer="51"/>
+<wire x1="-2.65" y1="3.45" x2="-2" y2="4.1" width="0.1" layer="51"/>
+<wire x1="-2.3" y1="4.1" x2="2.3" y2="4.1" width="0.2" layer="21"/>
+<wire x1="2.3" y1="4.1" x2="2.3" y2="-4.1" width="0.2" layer="21"/>
+<wire x1="2.3" y1="-4.1" x2="-2.3" y2="-4.1" width="0.2" layer="21"/>
+<wire x1="-2.3" y1="-4.1" x2="-2.3" y2="4.1" width="0.2" layer="21"/>
+<wire x1="-4.45" y1="4.15" x2="-2.65" y2="4.15" width="0.2" layer="21"/>
+</package>
+</packages>
+<symbols>
+<symbol name="CD74HC4067SM96">
+<wire x1="5.08" y1="2.54" x2="40.64" y2="2.54" width="0.254" layer="94"/>
+<wire x1="40.64" y1="-30.48" x2="40.64" y2="2.54" width="0.254" layer="94"/>
+<wire x1="40.64" y1="-30.48" x2="5.08" y2="-30.48" width="0.254" layer="94"/>
+<wire x1="5.08" y1="2.54" x2="5.08" y2="-30.48" width="0.254" layer="94"/>
+<text x="41.91" y="7.62" size="1.778" layer="95" align="center-left">&gt;NAME</text>
+<text x="41.91" y="5.08" size="1.778" layer="96" align="center-left">&gt;VALUE</text>
+<pin name="COMMON_INPUT/OUTPUT" x="0" y="0" length="middle"/>
+<pin name="I7" x="0" y="-2.54" length="middle"/>
+<pin name="I6" x="0" y="-5.08" length="middle"/>
+<pin name="I5" x="0" y="-7.62" length="middle"/>
+<pin name="I4" x="0" y="-10.16" length="middle"/>
+<pin name="I3" x="0" y="-12.7" length="middle"/>
+<pin name="I2" x="0" y="-15.24" length="middle"/>
+<pin name="I1" x="0" y="-17.78" length="middle"/>
+<pin name="I0" x="0" y="-20.32" length="middle"/>
+<pin name="S0" x="0" y="-22.86" length="middle"/>
+<pin name="S1" x="0" y="-25.4" length="middle"/>
+<pin name="GND" x="0" y="-27.94" length="middle"/>
+<pin name="VCC" x="45.72" y="0" length="middle" rot="R180"/>
+<pin name="I8" x="45.72" y="-2.54" length="middle" rot="R180"/>
+<pin name="I9" x="45.72" y="-5.08" length="middle" rot="R180"/>
+<pin name="I10" x="45.72" y="-7.62" length="middle" rot="R180"/>
+<pin name="I11" x="45.72" y="-10.16" length="middle" rot="R180"/>
+<pin name="I12" x="45.72" y="-12.7" length="middle" rot="R180"/>
+<pin name="I13" x="45.72" y="-15.24" length="middle" rot="R180"/>
+<pin name="I14" x="45.72" y="-17.78" length="middle" rot="R180"/>
+<pin name="I15" x="45.72" y="-20.32" length="middle" rot="R180"/>
+<pin name="!E" x="45.72" y="-22.86" length="middle" rot="R180"/>
+<pin name="S2" x="45.72" y="-25.4" length="middle" rot="R180"/>
+<pin name="S3" x="45.72" y="-27.94" length="middle" rot="R180"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="CD74HC4067SM96" prefix="IC">
+<description>&lt;b&gt;High Speed CMOS 16-Ch MUX/DEMUX 24P SOIC CD74HC4067SM96, Multiplexer/Demultiplexer Single 16:1, 3 V, 5 V, 24-Pin, SSOP, 1&lt;/b&gt;&lt;p&gt;
+Source: &lt;a href="http://docs-emea.rs-online.com/webdocs/0c95/0900766b80c95708.pdf"&gt; Datasheet &lt;/a&gt;</description>
+<gates>
+<gate name="G$1" symbol="CD74HC4067SM96" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="SOP65P780X200-24N">
+<connects>
+<connect gate="G$1" pin="!E" pad="15"/>
+<connect gate="G$1" pin="COMMON_INPUT/OUTPUT" pad="1"/>
+<connect gate="G$1" pin="GND" pad="12"/>
+<connect gate="G$1" pin="I0" pad="9"/>
+<connect gate="G$1" pin="I1" pad="8"/>
+<connect gate="G$1" pin="I10" pad="21"/>
+<connect gate="G$1" pin="I11" pad="20"/>
+<connect gate="G$1" pin="I12" pad="19"/>
+<connect gate="G$1" pin="I13" pad="18"/>
+<connect gate="G$1" pin="I14" pad="17"/>
+<connect gate="G$1" pin="I15" pad="16"/>
+<connect gate="G$1" pin="I2" pad="7"/>
+<connect gate="G$1" pin="I3" pad="6"/>
+<connect gate="G$1" pin="I4" pad="5"/>
+<connect gate="G$1" pin="I5" pad="4"/>
+<connect gate="G$1" pin="I6" pad="3"/>
+<connect gate="G$1" pin="I7" pad="2"/>
+<connect gate="G$1" pin="I8" pad="23"/>
+<connect gate="G$1" pin="I9" pad="22"/>
+<connect gate="G$1" pin="S0" pad="10"/>
+<connect gate="G$1" pin="S1" pad="11"/>
+<connect gate="G$1" pin="S2" pad="14"/>
+<connect gate="G$1" pin="S3" pad="13"/>
+<connect gate="G$1" pin="VCC" pad="24"/>
+</connects>
+<technologies>
+<technology name="">
+<attribute name="ARROW_PART_NUMBER" value="CD74HC4067SM96" constant="no"/>
+<attribute name="ARROW_PRICE-STOCK" value="https://www.arrow.com/en/products/cd74hc4067sm96/texas-instruments?region=nac" constant="no"/>
+<attribute name="DESCRIPTION" value="High Speed CMOS 16-Ch MUX/DEMUX 24P SOIC CD74HC4067SM96, Multiplexer/Demultiplexer Single 16:1, 3 V, 5 V, 24-Pin, SSOP, 1" constant="no"/>
+<attribute name="HEIGHT" value="2mm" constant="no"/>
+<attribute name="MANUFACTURER_NAME" value="Texas Instruments" constant="no"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="CD74HC4067SM96" constant="no"/>
+<attribute name="MOUSER_PART_NUMBER" value="595-CD74HC4067SM96" constant="no"/>
+<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.co.uk/ProductDetail/Texas-Instruments/CD74HC4067SM96?qs=JHHQeKcAU3DyfvAOSRLjhQ%3D%3D" constant="no"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -17993,12 +17993,10 @@ http://www.zetex.com&lt;p&gt;
 <parts>
 <part name="IC1" library="linear" library_urn="urn:adsk.eagle:library:262" deviceset="CA3140" device="D" package3d_urn="urn:adsk.eagle:package:16404/2"/>
 <part name="IC2" library="linear" library_urn="urn:adsk.eagle:library:262" deviceset="CA3140" device="D" package3d_urn="urn:adsk.eagle:package:16404/2"/>
-<part name="IC4" library="SamacSys_Parts" deviceset="CD74HC4067M96E4" device=""/>
 <part name="SUPPLY2" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="GND" device=""/>
 <part name="SUPPLY1" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="GND" device=""/>
 <part name="SUPPLY3" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="GND" device=""/>
 <part name="SUPPLY4" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="GND" device=""/>
-<part name="IC3" library="SamacSys_Parts" deviceset="CD74HC4067M96E4" device=""/>
 <part name="D2" library="BPW34" deviceset="BPW34" device=""/>
 <part name="D3" library="BPW34" deviceset="BPW34" device=""/>
 <part name="D4" library="BPW34" deviceset="BPW34" device=""/>
@@ -18056,6 +18054,8 @@ http://www.zetex.com&lt;p&gt;
 <part name="SUPPLY12" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="GND" device=""/>
 <part name="C4" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="CPOL-US" device="E5-6" package3d_urn="urn:adsk.eagle:package:23368/1" value="220uF"/>
 <part name="C5" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="CPOL-US" device="E5-6" package3d_urn="urn:adsk.eagle:package:23368/1" value="220uF"/>
+<part name="IC6" library="CD74HC4067SM96" deviceset="CD74HC4067SM96" device=""/>
+<part name="IC3" library="CD74HC4067SM96" deviceset="CD74HC4067SM96" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -18068,18 +18068,12 @@ http://www.zetex.com&lt;p&gt;
 <instance part="IC2" gate="A" x="76.2" y="53.34" smashed="yes">
 <attribute name="VALUE" x="59.69" y="47.752" size="1.778" layer="96"/>
 </instance>
-<instance part="IC4" gate="G$1" x="96.52" y="53.34" smashed="yes">
-<attribute name="VALUE" x="107.95" y="58.42" size="1.778" layer="96" align="center-left"/>
-</instance>
 <instance part="SUPPLY2" gate="GND" x="35.052" y="3.302" smashed="yes">
 <attribute name="VALUE" x="33.147" y="0.127" size="1.778" layer="96"/>
 </instance>
 <instance part="SUPPLY1" gate="GND" x="73.66" y="43.18" smashed="yes"/>
 <instance part="SUPPLY3" gate="GND" x="40.64" y="48.26" smashed="yes"/>
 <instance part="SUPPLY4" gate="GND" x="96.52" y="20.32" smashed="yes"/>
-<instance part="IC3" gate="G$1" x="-48.26" y="53.34" smashed="yes">
-<attribute name="VALUE" x="-36.83" y="58.42" size="1.778" layer="96" align="center-left"/>
-</instance>
 <instance part="D2" gate="G$1" x="-86.36" y="25.4" smashed="yes" rot="R90">
 <attribute name="VALUE" x="-83.058" y="21.844" size="1.27" layer="96" rot="R90"/>
 </instance>
@@ -18268,6 +18262,14 @@ http://www.zetex.com&lt;p&gt;
 <attribute name="NAME" x="48.768" y="91.821" size="1.778" layer="95"/>
 <attribute name="VALUE" x="48.768" y="86.995" size="1.778" layer="96"/>
 </instance>
+<instance part="IC6" gate="G$1" x="-48.26" y="53.34" smashed="yes">
+<attribute name="NAME" x="-6.35" y="60.96" size="1.778" layer="95" align="center-left"/>
+<attribute name="VALUE" x="-6.35" y="58.42" size="1.778" layer="96" align="center-left"/>
+</instance>
+<instance part="IC3" gate="G$1" x="96.52" y="53.34" smashed="yes">
+<attribute name="NAME" x="138.43" y="60.96" size="1.778" layer="95" align="center-left"/>
+<attribute name="VALUE" x="138.43" y="58.42" size="1.778" layer="96" align="center-left"/>
+</instance>
 </instances>
 <busses>
 </busses>
@@ -18302,8 +18304,8 @@ http://www.zetex.com&lt;p&gt;
 </segment>
 <segment>
 <pinref part="SUPPLY4" gate="GND" pin="GND"/>
-<pinref part="IC4" gate="G$1" pin="GND"/>
 <wire x1="96.52" y1="22.86" x2="96.52" y2="25.4" width="0.1524" layer="91"/>
+<pinref part="IC3" gate="G$1" pin="GND"/>
 </segment>
 <segment>
 <pinref part="D2" gate="G$1" pin="A"/>
@@ -18316,36 +18318,36 @@ http://www.zetex.com&lt;p&gt;
 <pinref part="D4" gate="G$1" pin="A"/>
 <wire x1="-66.04" y1="17.78" x2="-66.04" y2="12.7" width="0.1524" layer="91"/>
 <wire x1="-66.04" y1="12.7" x2="-76.2" y2="12.7" width="0.1524" layer="91"/>
-<pinref part="IC3" gate="G$1" pin="GND"/>
 <wire x1="-48.26" y1="25.4" x2="-48.26" y2="12.7" width="0.1524" layer="91"/>
 <wire x1="-48.26" y1="12.7" x2="-66.04" y2="12.7" width="0.1524" layer="91"/>
 <junction x="-66.04" y="12.7"/>
+<pinref part="IC6" gate="G$1" pin="GND"/>
 </segment>
 <segment>
-<pinref part="IC3" gate="G$1" pin="S3"/>
 <wire x1="-2.54" y1="25.4" x2="-2.54" y2="17.78" width="0.1524" layer="91"/>
 <pinref part="SUPPLY6" gate="GND" pin="GND"/>
 <wire x1="-2.54" y1="17.78" x2="7.62" y2="17.78" width="0.1524" layer="91"/>
-<pinref part="IC3" gate="G$1" pin="S2"/>
 <wire x1="-2.54" y1="27.94" x2="0" y2="27.94" width="0.1524" layer="91"/>
 <wire x1="0" y1="27.94" x2="0" y2="20.32" width="0.1524" layer="91"/>
 <wire x1="0" y1="20.32" x2="7.62" y2="20.32" width="0.1524" layer="91"/>
 <wire x1="7.62" y1="20.32" x2="7.62" y2="17.78" width="0.1524" layer="91"/>
 <junction x="7.62" y="17.78"/>
-<pinref part="IC3" gate="G$1" pin="!E"/>
 <wire x1="-2.54" y1="30.48" x2="7.62" y2="30.48" width="0.1524" layer="91"/>
 <wire x1="7.62" y1="30.48" x2="7.62" y2="17.78" width="0.1524" layer="91"/>
+<pinref part="IC6" gate="G$1" pin="!E"/>
+<pinref part="IC6" gate="G$1" pin="S2"/>
+<pinref part="IC6" gate="G$1" pin="S3"/>
 </segment>
 <segment>
-<pinref part="IC4" gate="G$1" pin="S3"/>
 <wire x1="142.24" y1="25.4" x2="144.78" y2="25.4" width="0.1524" layer="91"/>
 <wire x1="144.78" y1="25.4" x2="144.78" y2="17.78" width="0.1524" layer="91"/>
 <pinref part="SUPPLY7" gate="GND" pin="GND"/>
 <wire x1="144.78" y1="17.78" x2="152.4" y2="17.78" width="0.1524" layer="91"/>
-<pinref part="IC4" gate="G$1" pin="!E"/>
 <wire x1="142.24" y1="30.48" x2="152.4" y2="30.48" width="0.1524" layer="91"/>
 <wire x1="152.4" y1="30.48" x2="152.4" y2="17.78" width="0.1524" layer="91"/>
 <junction x="152.4" y="17.78"/>
+<pinref part="IC3" gate="G$1" pin="!E"/>
+<pinref part="IC3" gate="G$1" pin="S3"/>
 </segment>
 <segment>
 <pinref part="R11" gate="G$1" pin="1"/>
@@ -18475,9 +18477,9 @@ http://www.zetex.com&lt;p&gt;
 <net name="OUT" class="0">
 <segment>
 <pinref part="IC2" gate="A" pin="OUT"/>
-<pinref part="IC4" gate="G$1" pin="COMMON_INPUT/OUTPUT"/>
 <wire x1="83.82" y1="53.34" x2="96.52" y2="53.34" width="0.1524" layer="91"/>
 <label x="89.154" y="54.356" size="1.778" layer="95"/>
+<pinref part="IC3" gate="G$1" pin="COMMON_INPUT/OUTPUT"/>
 </segment>
 <segment>
 <pinref part="IC5" gate="G$1" pin="AIN0"/>
@@ -18490,80 +18492,80 @@ http://www.zetex.com&lt;p&gt;
 <segment>
 <wire x1="73.66" y1="40.64" x2="78.74" y2="40.64" width="0.1524" layer="91"/>
 <wire x1="78.74" y1="40.64" x2="78.74" y2="50.8" width="0.1524" layer="91"/>
-<pinref part="IC4" gate="G$1" pin="I7"/>
 <wire x1="78.74" y1="50.8" x2="96.52" y2="50.8" width="0.1524" layer="91"/>
 <pinref part="R3" gate="G$1" pin="1"/>
 <label x="89.916" y="51.308" size="1.778" layer="95"/>
+<pinref part="IC3" gate="G$1" pin="I7"/>
 </segment>
 </net>
 <net name="G7" class="0">
 <segment>
-<pinref part="IC4" gate="G$1" pin="I6"/>
 <wire x1="96.52" y1="48.26" x2="79.756" y2="48.26" width="0.1524" layer="91"/>
 <wire x1="79.756" y1="48.26" x2="79.756" y2="35.56" width="0.1524" layer="91"/>
 <wire x1="79.756" y1="35.56" x2="73.66" y2="35.56" width="0.1524" layer="91"/>
 <pinref part="R4" gate="G$1" pin="1"/>
 <label x="89.662" y="48.514" size="1.778" layer="95"/>
+<pinref part="IC3" gate="G$1" pin="I6"/>
 </segment>
 </net>
 <net name="G6" class="0">
 <segment>
-<pinref part="IC4" gate="G$1" pin="I5"/>
 <wire x1="96.52" y1="45.72" x2="80.772" y2="45.72" width="0.1524" layer="91"/>
 <wire x1="80.772" y1="45.72" x2="80.772" y2="30.48" width="0.1524" layer="91"/>
 <wire x1="80.772" y1="30.48" x2="73.66" y2="30.48" width="0.1524" layer="91"/>
 <pinref part="R5" gate="G$1" pin="1"/>
 <label x="89.662" y="46.228" size="1.778" layer="95"/>
+<pinref part="IC3" gate="G$1" pin="I5"/>
 </segment>
 </net>
 <net name="G5" class="0">
 <segment>
-<pinref part="IC4" gate="G$1" pin="I4"/>
 <wire x1="96.52" y1="43.18" x2="81.788" y2="43.18" width="0.1524" layer="91"/>
 <wire x1="81.788" y1="43.18" x2="81.788" y2="25.4" width="0.1524" layer="91"/>
 <wire x1="81.788" y1="25.4" x2="73.66" y2="25.4" width="0.1524" layer="91"/>
 <pinref part="R6" gate="G$1" pin="1"/>
 <label x="89.662" y="43.688" size="1.778" layer="95"/>
+<pinref part="IC3" gate="G$1" pin="I4"/>
 </segment>
 </net>
 <net name="G4" class="0">
 <segment>
-<pinref part="IC4" gate="G$1" pin="I3"/>
 <wire x1="96.52" y1="40.64" x2="82.804" y2="40.64" width="0.1524" layer="91"/>
 <wire x1="82.804" y1="40.64" x2="82.804" y2="20.32" width="0.1524" layer="91"/>
 <wire x1="82.804" y1="20.32" x2="73.66" y2="20.32" width="0.1524" layer="91"/>
 <pinref part="R7" gate="G$1" pin="1"/>
 <label x="89.662" y="41.148" size="1.778" layer="95"/>
+<pinref part="IC3" gate="G$1" pin="I3"/>
 </segment>
 </net>
 <net name="G3" class="0">
 <segment>
-<pinref part="IC4" gate="G$1" pin="I2"/>
 <wire x1="96.52" y1="38.1" x2="83.82" y2="38.1" width="0.1524" layer="91"/>
 <wire x1="83.82" y1="38.1" x2="83.82" y2="15.24" width="0.1524" layer="91"/>
 <wire x1="83.82" y1="15.24" x2="73.66" y2="15.24" width="0.1524" layer="91"/>
 <pinref part="R8" gate="G$1" pin="1"/>
 <label x="89.662" y="38.608" size="1.778" layer="95"/>
+<pinref part="IC3" gate="G$1" pin="I2"/>
 </segment>
 </net>
 <net name="G2" class="0">
 <segment>
-<pinref part="IC4" gate="G$1" pin="I1"/>
 <wire x1="96.52" y1="35.56" x2="84.836" y2="35.56" width="0.1524" layer="91"/>
 <wire x1="84.836" y1="35.56" x2="84.836" y2="10.16" width="0.1524" layer="91"/>
 <wire x1="84.836" y1="10.16" x2="73.66" y2="10.16" width="0.1524" layer="91"/>
 <pinref part="R9" gate="G$1" pin="1"/>
 <label x="89.662" y="36.068" size="1.778" layer="95"/>
+<pinref part="IC3" gate="G$1" pin="I1"/>
 </segment>
 </net>
 <net name="G1" class="0">
 <segment>
-<pinref part="IC4" gate="G$1" pin="I0"/>
 <wire x1="96.52" y1="33.02" x2="85.852" y2="33.02" width="0.1524" layer="91"/>
 <wire x1="85.852" y1="33.02" x2="85.852" y2="5.08" width="0.1524" layer="91"/>
 <wire x1="85.852" y1="5.08" x2="73.66" y2="5.08" width="0.1524" layer="91"/>
 <pinref part="R10" gate="G$1" pin="1"/>
 <label x="89.408" y="33.528" size="1.778" layer="95"/>
+<pinref part="IC3" gate="G$1" pin="I0"/>
 </segment>
 </net>
 <net name="7V" class="0">
@@ -18605,7 +18607,6 @@ http://www.zetex.com&lt;p&gt;
 </net>
 <net name="5V" class="0">
 <segment>
-<pinref part="IC4" gate="G$1" pin="VCC"/>
 <label x="144.526" y="54.356" size="1.778" layer="95"/>
 <wire x1="142.24" y1="53.34" x2="147.32" y2="53.34" width="0.1524" layer="91"/>
 <pinref part="C11" gate="G$1" pin="2"/>
@@ -18614,9 +18615,9 @@ http://www.zetex.com&lt;p&gt;
 <pinref part="C10" gate="G$1" pin="2"/>
 <wire x1="147.32" y1="52.324" x2="147.32" y2="53.34" width="0.1524" layer="91"/>
 <junction x="147.32" y="53.34"/>
+<pinref part="IC3" gate="G$1" pin="VCC"/>
 </segment>
 <segment>
-<pinref part="IC3" gate="G$1" pin="VCC"/>
 <label x="2.54" y="53.34" size="1.778" layer="95"/>
 <wire x1="-2.54" y1="53.34" x2="5.08" y2="53.34" width="0.1524" layer="91"/>
 <pinref part="C6" gate="G$1" pin="2"/>
@@ -18625,6 +18626,7 @@ http://www.zetex.com&lt;p&gt;
 <junction x="5.08" y="53.34"/>
 <pinref part="C7" gate="G$1" pin="2"/>
 <wire x1="11.176" y1="53.34" x2="11.176" y2="50.8" width="0.1524" layer="91"/>
+<pinref part="IC6" gate="G$1" pin="VCC"/>
 </segment>
 <segment>
 <pinref part="IC5" gate="G$1" pin="VDD"/>
@@ -18670,34 +18672,34 @@ http://www.zetex.com&lt;p&gt;
 <segment>
 <pinref part="D4" gate="G$1" pin="C"/>
 <wire x1="-66.04" y1="30.48" x2="-66.04" y2="33.02" width="0.1524" layer="91"/>
-<pinref part="IC3" gate="G$1" pin="I0"/>
 <wire x1="-66.04" y1="33.02" x2="-48.26" y2="33.02" width="0.1524" layer="91"/>
 <label x="-64.262" y="33.528" size="1.778" layer="95"/>
+<pinref part="IC6" gate="G$1" pin="I0"/>
 </segment>
 </net>
 <net name="DET2" class="0">
 <segment>
-<pinref part="IC3" gate="G$1" pin="I1"/>
 <wire x1="-48.26" y1="35.56" x2="-76.2" y2="35.56" width="0.1524" layer="91"/>
 <pinref part="D3" gate="G$1" pin="C"/>
 <wire x1="-76.2" y1="35.56" x2="-76.2" y2="30.48" width="0.1524" layer="91"/>
 <label x="-72.898" y="36.068" size="1.778" layer="95"/>
+<pinref part="IC6" gate="G$1" pin="I1"/>
 </segment>
 </net>
 <net name="DET1" class="0">
 <segment>
 <pinref part="D2" gate="G$1" pin="C"/>
 <wire x1="-86.36" y1="30.48" x2="-86.36" y2="38.1" width="0.1524" layer="91"/>
-<pinref part="IC3" gate="G$1" pin="I2"/>
 <wire x1="-86.36" y1="38.1" x2="-48.26" y2="38.1" width="0.1524" layer="91"/>
 <label x="-72.644" y="40.386" size="1.778" layer="95"/>
+<pinref part="IC6" gate="G$1" pin="I2"/>
 </segment>
 </net>
 <net name="SD0" class="0">
 <segment>
-<pinref part="IC3" gate="G$1" pin="S0"/>
 <wire x1="-48.26" y1="30.48" x2="-53.34" y2="30.48" width="0.1524" layer="91"/>
 <label x="-58.42" y="30.48" size="1.778" layer="95"/>
+<pinref part="IC6" gate="G$1" pin="S0"/>
 </segment>
 <segment>
 <wire x1="10.16" y1="99.06" x2="20.32" y2="99.06" width="0.1524" layer="91"/>
@@ -18707,9 +18709,9 @@ http://www.zetex.com&lt;p&gt;
 </net>
 <net name="SD1" class="0">
 <segment>
-<pinref part="IC3" gate="G$1" pin="S1"/>
 <wire x1="-48.26" y1="27.94" x2="-50.8" y2="27.94" width="0.1524" layer="91"/>
 <label x="-55.88" y="27.94" size="1.778" layer="95"/>
+<pinref part="IC6" gate="G$1" pin="S1"/>
 </segment>
 <segment>
 <wire x1="10.16" y1="96.52" x2="20.32" y2="96.52" width="0.1524" layer="91"/>
@@ -18719,9 +18721,9 @@ http://www.zetex.com&lt;p&gt;
 </net>
 <net name="TIA-" class="0">
 <segment>
-<pinref part="IC3" gate="G$1" pin="COMMON_INPUT/OUTPUT"/>
 <wire x1="-48.26" y1="53.34" x2="-55.88" y2="53.34" width="0.1524" layer="91"/>
 <label x="-60.96" y="53.34" size="1.778" layer="95"/>
+<pinref part="IC6" gate="G$1" pin="COMMON_INPUT/OUTPUT"/>
 </segment>
 <segment>
 <pinref part="IC1" gate="A" pin="-IN"/>
@@ -18738,9 +18740,9 @@ http://www.zetex.com&lt;p&gt;
 </net>
 <net name="SG0" class="0">
 <segment>
-<pinref part="IC4" gate="G$1" pin="S0"/>
 <wire x1="96.52" y1="30.48" x2="91.44" y2="30.48" width="0.1524" layer="91"/>
 <label x="88.9" y="30.48" size="1.778" layer="95"/>
+<pinref part="IC3" gate="G$1" pin="S0"/>
 </segment>
 <segment>
 <wire x1="10.16" y1="106.68" x2="20.32" y2="106.68" width="0.1524" layer="91"/>
@@ -18750,9 +18752,9 @@ http://www.zetex.com&lt;p&gt;
 </net>
 <net name="SG1" class="0">
 <segment>
-<pinref part="IC4" gate="G$1" pin="S1"/>
 <wire x1="96.52" y1="27.94" x2="93.98" y2="27.94" width="0.1524" layer="91"/>
 <label x="88.9" y="27.94" size="1.778" layer="95"/>
+<pinref part="IC3" gate="G$1" pin="S1"/>
 </segment>
 <segment>
 <wire x1="10.16" y1="104.14" x2="20.32" y2="104.14" width="0.1524" layer="91"/>
@@ -18762,9 +18764,9 @@ http://www.zetex.com&lt;p&gt;
 </net>
 <net name="SG2" class="0">
 <segment>
-<pinref part="IC4" gate="G$1" pin="S2"/>
 <wire x1="142.24" y1="27.94" x2="144.78" y2="27.94" width="0.1524" layer="91"/>
 <label x="144.78" y="27.94" size="1.778" layer="95"/>
+<pinref part="IC3" gate="G$1" pin="S2"/>
 </segment>
 <segment>
 <wire x1="10.16" y1="101.6" x2="20.32" y2="101.6" width="0.1524" layer="91"/>
