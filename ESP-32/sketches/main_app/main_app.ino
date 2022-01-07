@@ -3,16 +3,16 @@
 /* File description: SR-NIRS sensor main app                         */
 /* Author name:      Giacomo Dollevedo                               */
 /* Creation date:    30Jun2021                                       */
-/* Revision date:    01Aug2021                                       */
+/* Revision date:    28Nov2021                                       */
 /* ***************************************************************** */
 
 #include <Adafruit_ADS1X15.h>
 #include <Wire.h>
 
-#include <DroneTimer.h>
-#include <NIRSFilter.h>
+#include <SRTimer.h>
 #include <SRsensor.h>
 #include <SRBluetooth.h>
+#include <SRPressure.h>
 
 /*SET DEBUG TO 1 TO ENABLE SERIAL MONITOR PRINTS*/
 #define DEBUG 0
@@ -22,7 +22,7 @@
 #define N_GAIN 8
 #define MEANVAL 1
 #define N_DET 3
-#define MIDRANGE 12800
+#define MIDRANGE 18000L
 
 /*DATA ACQUISITION FREQUENCY*/
 #define FREQUENCY 50
@@ -32,9 +32,10 @@
 #define PACKET_SIZE 150
 
 /*IMPORTED CLASSES OBJECTS*/
-DroneTimer timer;       // ESP-32 timer
+SRTimer timer;       // ESP-32 timer
 SRSensor NIRSsensor;    // NIRS Sensor
 SRBluetooth NIRSBt;     // Bluetooth comm
+SRPressure NIRSpressure;
 
 /************ TIMER VARIABLES ***********/
 volatile unsigned char timer_flag = 0;
@@ -62,7 +63,7 @@ unsigned char cDet = 0;
 
 /************** MEAN VALUE VARIABLES *************/
 
-int means[N_DET][N_GAIN];
+long means[N_DET][N_GAIN];
 unsigned char currCh = 0;
 unsigned char currGain = 0;
 unsigned char flagMeans = MEANVAL;
@@ -87,14 +88,16 @@ void IRAM_ATTR timerInterrupt()
 void setup()
 {
 
+  pinMode(4, OUTPUT);
+
   /* Initializing variables */
   for (int i = 0; i < N_GAIN; i++)
   {
-    meanVal[i] = 0;
-    compare[i] = 0;
-    means[0][i] = 0;
-    means[1][i] = 0;
-    means[2][i] = 0;
+    meanVal[i] = 0L;
+    compare[i] = 0L;
+    means[0][i] = 0L;
+    means[1][i] = 0L;
+    means[2][i] = 0L;
   }
 
   if (DEBUG)
@@ -127,6 +130,8 @@ void setup()
   while(flagMeans)
     findMean();
 
+  //digitalWrite(2, LOW);
+
   /*Finding which gain sets the value closer to the middle of the adc range*/
   while (flagCalibrate)
     calibrate();
@@ -135,18 +140,24 @@ void setup()
   for(int j=0;j<N_DET;j++){
     for(int i=0;i<N_GAIN;i++){
       if(i==0){
-        sprintf(message_packet, "%s#C\0", message_packet, means[j][i]);
+        sprintf(message_packet, "%s#C\0", message_packet);
       }
       
-      sprintf(message_packet, "%s%d;\0", message_packet, means[j][i]);
+      sprintf(message_packet, "%s%ld;\0", message_packet, means[j][i]);
     }
     
     sprintf(message_packet, "%s\n\0", message_packet);
   }
 
+  //NIRSsensor.changeDetGain(5, 0);
+  //NIRSsensor.changeDetGain(5, 1);
+  //NIRSsensor.changeDetGain(4, 2);
+
   /*Sending configuration message over Bluetooth*/
   NIRSBt.sendGains(NIRSsensor.chGains); /*Auto gain settings*/
+  delay(100);
   NIRSBt.sendData(message_packet); /*Sending all means by channel*/
+  delay(100);
   message_packet[0] = '\0';
 
   /*Resetting time variable to timestamp*/
@@ -169,6 +180,8 @@ void loop()
     /*Reading from NIRS Sensor*/
     NIRSsensor.readState(sensorState);
     sensorState++;
+
+    processCommand(NIRSBt.readCommand());
     
   }
 
@@ -195,6 +208,7 @@ void loop()
   if(packet_ready){
     packet_ready = 0; // Resetting flag
     NIRSBt.sendData(message_packet);  // Sending outgoing buffer through Bluetooth
+    //delay(10);
     message_packet[0] = '\0';
   }
 
@@ -216,9 +230,19 @@ void findMean(){
 
     means[currCh][currGain] += NIRSsensor.readSensor();
     nRead++;
+    //digitalWrite(2, HIGH);
 
     if(nRead == 500){
+      if(DEBUG){
+        Serial.printf("%ld\t",means[currCh][currGain]);
+      }
+      
       means[currCh][currGain] = means[currCh][currGain]/nRead;
+
+      if(DEBUG){
+        Serial.printf("%ld\n",means[currCh][currGain]);
+      }
+      
       currGain++;
       
       
@@ -307,4 +331,38 @@ void calibrate(){
 /* ************************************************************************************ */
 double getTimestamp(){
   return double(millis()) / 1000 - initTime;
+}
+
+/* ************************************************************************************ */
+/* Method's name:          processCommand                                               */ 
+/* Description:            Process incoming bluetooth commands                          */
+/*                                                                                      */
+/* Entry parameters:       char* bufferIn -> Array containing pre formatted command     */
+/*                                                                                      */
+/* Return parameters:      n/a                                                          */
+/* ************************************************************************************ */
+// TESTING
+// TODO:
+//    - START VOT PROTOCOL
+//    - STOP VOT PROTOCOL
+void processCommand(char* bufferIn){
+  if(bufferIn[0] == '\0')
+    return;
+  
+  else if(bufferIn[0] == '#'){
+    switch(bufferIn[1]){
+      case 'T':
+        digitalWrite(4, HIGH);
+        return;
+      default:
+        digitalWrite(4, LOW);
+        return;
+    }
+  }
+
+  else{
+    return;
+  }
+ 
+  return;
 }
