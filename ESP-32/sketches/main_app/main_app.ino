@@ -3,7 +3,7 @@
 /* File description: SR-NIRS sensor main app                         */
 /* Author name:      Giacomo Dollevedo                               */
 /* Creation date:    30Jun2021                                       */
-/* Revision date:    28Nov2021                                       */
+/* Revision date:    26Jan2022                                       */
 /* ***************************************************************** */
 
 #include <Adafruit_ADS1X15.h>
@@ -35,7 +35,7 @@
 SRTimer timer;       // ESP-32 timer
 SRSensor NIRSsensor;    // NIRS Sensor
 SRBluetooth NIRSBt;     // Bluetooth comm
-SRPressure NIRSpressure;
+SRPressure NIRSpressure; // Pressure sensor and Sphymomanometer control
 
 /************ TIMER VARIABLES ***********/
 volatile unsigned char timer_flag = 0;
@@ -78,17 +78,29 @@ char *message_packet = (char *)calloc(MAX_SIZE, sizeof(char)); // Outgoing bluet
 
 /********** END OF BLUETOOTH CONN VARIABLES **********/
 
+
+/************** PRESSURE CONTROL VARIABLES *************/
+
+unsigned char VOT_flag = 0;
+unsigned char pump_flag = 0;
+int VOT_start_time = 0;
+/********** END OF PRESSURE CONTROL VARIABLES **********/
+
+
 /*Timer interruption routine*/
 void IRAM_ATTR timerInterrupt()
 {
 
   timer_flag = 1;
+  
 }
 
 void setup()
 {
 
-  pinMode(4, OUTPUT);
+  //pinMode(4, OUTPUT);
+
+  NIRSpressure.initPress();
 
   /* Initializing variables */
   for (int i = 0; i < N_GAIN; i++)
@@ -104,6 +116,9 @@ void setup()
   {
     Serial.begin(115200);
   }
+
+  /* Toggling solenoid valve */
+  NIRSpressure.toggleValve();
 
   /*Initializing NIRS Sensor object*/
   NIRSsensor.initSensor();
@@ -160,6 +175,8 @@ void setup()
   delay(100);
   message_packet[0] = '\0';
 
+  NIRSpressure.setVotDuration(10);
+
   /*Resetting time variable to timestamp*/
   initTime = initTime = double(millis()) / 1000;
    
@@ -172,18 +189,19 @@ void loop()
   {
     timer_flag = 0;
 
-    /*Timestamping on the first data point*/
+    /*Timestamping and reading pressure on the first data point*/
     if(sensorState == 0){
       cTime = getTimestamp();
+      NIRSpressure.readPressure();
     }
 
     /*Reading from NIRS Sensor*/
     NIRSsensor.readState(sensorState);
     sensorState++;
-
-    processCommand(NIRSBt.readCommand());
     
   }
+
+  processCommand(NIRSBt.readCommand());
 
   /*When the last sensor is read the outgoing message buffer is written*/
   if(sensorState == 6){
@@ -212,6 +230,8 @@ void loop()
     message_packet[0] = '\0';
   }
 
+  /*Processing VOT*/
+  NIRSpressure.runVOT();
   
 }
 
@@ -342,9 +362,6 @@ double getTimestamp(){
 /* Return parameters:      n/a                                                          */
 /* ************************************************************************************ */
 // TESTING
-// TODO:
-//    - START VOT PROTOCOL
-//    - STOP VOT PROTOCOL
 void processCommand(char* bufferIn){
   if(bufferIn[0] == '\0')
     return;
@@ -352,10 +369,12 @@ void processCommand(char* bufferIn){
   else if(bufferIn[0] == '#'){
     switch(bufferIn[1]){
       case 'T':
-        digitalWrite(4, HIGH);
+        NIRSpressure.setVotState(1);
+        VOT_flag = 1;
+        NIRSBt.clearBuffer();
         return;
-      default:
-        digitalWrite(4, LOW);
+      case 'S':
+        VOT_flag = 0;
         return;
     }
   }
@@ -363,6 +382,5 @@ void processCommand(char* bufferIn){
   else{
     return;
   }
- 
   return;
 }
