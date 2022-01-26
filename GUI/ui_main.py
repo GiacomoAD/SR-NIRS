@@ -18,7 +18,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(1040, 736)
+        MainWindow.resize(1040, 738)
         MainWindow.setMinimumSize(QSize(1000, 720))
         palette = QPalette()
         brush = QBrush(QColor(255, 255, 255, 255))
@@ -1118,11 +1118,28 @@ class Ui_MainWindow(object):
         self.page_config_off.setObjectName(u"page_config_off")
         self.gridLayout_10 = QGridLayout(self.page_config_off)
         self.gridLayout_10.setObjectName(u"gridLayout_10")
-        self.label_2 = QLabel(self.page_config_off)
-        self.label_2.setObjectName(u"label_2")
-        self.label_2.setAlignment(Qt.AlignCenter)
+        self.textEdit = QTextEdit(self.page_config_off)
+        self.textEdit.setObjectName(u"textEdit")
+        self.textEdit.setStyleSheet(u"QTextEdit {\n"
+"	background-color: rgb(27, 29, 35);\n"
+"	border-radius: 5px;\n"
+"	padding: 10px;\n"
+"}\n"
+"QTextEdit:hover {\n"
+"	border: 2px solid rgb(64, 71, 88);\n"
+"}\n"
+"QTextEdit:focus {\n"
+"	border: 2px solid rgb(91, 101, 124);\n"
+"}\n"
+"")
 
-        self.gridLayout_10.addWidget(self.label_2, 1, 0, 1, 1)
+        self.gridLayout_10.addWidget(self.textEdit, 2, 2, 1, 1)
+
+        self.label_3 = QLabel(self.page_config_off)
+        self.label_3.setObjectName(u"label_3")
+        self.label_3.setAlignment(Qt.AlignCenter)
+
+        self.gridLayout_10.addWidget(self.label_3, 2, 0, 1, 1)
 
         self.button_saveNote = QPushButton(self.page_config_off)
         self.button_saveNote.setObjectName(u"button_saveNote")
@@ -1143,6 +1160,12 @@ class Ui_MainWindow(object):
 
         self.gridLayout_10.addWidget(self.button_saveNote, 3, 2, 1, 1)
 
+        self.label_2 = QLabel(self.page_config_off)
+        self.label_2.setObjectName(u"label_2")
+        self.label_2.setAlignment(Qt.AlignCenter)
+
+        self.gridLayout_10.addWidget(self.label_2, 1, 0, 1, 1)
+
         self.lineEdit_2 = QLineEdit(self.page_config_off)
         self.lineEdit_2.setObjectName(u"lineEdit_2")
         self.lineEdit_2.setStyleSheet(u"QLineEdit {\n"
@@ -1159,29 +1182,6 @@ class Ui_MainWindow(object):
 "}")
 
         self.gridLayout_10.addWidget(self.lineEdit_2, 1, 2, 1, 1)
-
-        self.label_3 = QLabel(self.page_config_off)
-        self.label_3.setObjectName(u"label_3")
-        self.label_3.setAlignment(Qt.AlignCenter)
-
-        self.gridLayout_10.addWidget(self.label_3, 2, 0, 1, 1)
-
-        self.textEdit = QTextEdit(self.page_config_off)
-        self.textEdit.setObjectName(u"textEdit")
-        self.textEdit.setStyleSheet(u"QTextEdit {\n"
-"	background-color: rgb(27, 29, 35);\n"
-"	border-radius: 5px;\n"
-"	padding: 10px;\n"
-"}\n"
-"QTextEdit:hover {\n"
-"	border: 2px solid rgb(64, 71, 88);\n"
-"}\n"
-"QTextEdit:focus {\n"
-"	border: 2px solid rgb(91, 101, 124);\n"
-"}\n"
-"")
-
-        self.gridLayout_10.addWidget(self.textEdit, 2, 2, 1, 1)
 
         self.stackedWidget_2.addWidget(self.page_config_off)
         self.page_config_on = QWidget()
@@ -1458,6 +1458,53 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_15.addWidget(self.timeC_label)
 
+        self.horizontalSpacer_6 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.horizontalLayout_15.addItem(self.horizontalSpacer_6)
+
+        self.button_vot = QPushButton(self.frame_13)
+        self.button_vot.setObjectName(u"button_vot")
+        self.button_vot.setMinimumSize(QSize(120, 30))
+        self.button_vot.setFont(font8)
+        self.button_vot.setStyleSheet(u"QPushButton:enabled {\n"
+"	border: 2px solid rgb(52, 59, 72);\n"
+"	border-radius: 5px;	\n"
+"	background-color: rgb(52, 59, 72);\n"
+"}\n"
+"QPushButton:hover {\n"
+"	background-color: rgb(57, 65, 80);\n"
+"	border: 2px solid rgb(61, 70, 86);\n"
+"}\n"
+"QPushButton:pressed {	\n"
+"	background-color: rgb(35, 40, 49);\n"
+"	border: 2px solid rgb(43, 50, 61);\n"
+"}\n"
+"QPushButton:disabled{\n"
+"	background-color: rgb(35, 40, 49);\n"
+"	border: 2px solid rgb(43, 50, 61);\n"
+"}")
+
+        self.horizontalLayout_15.addWidget(self.button_vot)
+
+        self.lineEdit_pressureInput = QLineEdit(self.frame_13)
+        self.lineEdit_pressureInput.setObjectName(u"lineEdit_pressureInput")
+        self.lineEdit_pressureInput.setMinimumSize(QSize(0, 0))
+        self.lineEdit_pressureInput.setMaximumSize(QSize(16777215, 25))
+        self.lineEdit_pressureInput.setStyleSheet(u"QLineEdit {\n"
+"	background-color: rgb(27, 29, 35);\n"
+"	border-radius: 5px;\n"
+"	border: 2px solid rgb(27, 29, 35);\n"
+"	padding-left: 10px;\n"
+"}\n"
+"QLineEdit:hover {\n"
+"	border: 2px solid rgb(64, 71, 88);\n"
+"}\n"
+"QLineEdit:focus {\n"
+"	border: 2px solid rgb(91, 101, 124);\n"
+"}")
+
+        self.horizontalLayout_15.addWidget(self.lineEdit_pressureInput)
+
 
         self.gridLayout_7.addWidget(self.frame_13, 0, 0, 1, 1, Qt.AlignHCenter)
 
@@ -1547,7 +1594,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.stackedWidget.setCurrentIndex(0)
+        self.stackedWidget.setCurrentIndex(2)
         self.stackedWidget_2.setCurrentIndex(0)
 
 
@@ -1588,10 +1635,10 @@ class Ui_MainWindow(object):
         self.button_chooseFolder.setText(QCoreApplication.translate("MainWindow", u"Choose Folder", None))
         self.lineEd_chooseFolder.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Choose save log folder. Default is current working directory.", None))
         self.button_config.setText(QCoreApplication.translate("MainWindow", u"Open Config", None))
-        self.label_2.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p><span style=\" font-size:10pt; font-weight:600;\">Visible Channels</span></p></body></html>", None))
-        self.button_saveNote.setText(QCoreApplication.translate("MainWindow", u"Save Note", None))
-        self.lineEdit_2.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Leave blank to show all", None))
         self.label_3.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p><span style=\" font-size:10pt; font-weight:600;\">Experiment Notes</span></p></body></html>", None))
+        self.button_saveNote.setText(QCoreApplication.translate("MainWindow", u"Save Note", None))
+        self.label_2.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p><span style=\" font-size:10pt; font-weight:600;\">Visible Channels</span></p></body></html>", None))
+        self.lineEdit_2.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Leave blank to show all", None))
         self.label_9.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p><span style=\" font-size:10pt; font-weight:600;\">Channel Selection</span></p></body></html>", None))
         self.label_14.setText(QCoreApplication.translate("MainWindow", u"1", None))
         self.label_10.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p><span style=\" font-size:10pt; font-weight:600;\">850nm Gain</span></p></body></html>", None))
@@ -1608,6 +1655,11 @@ class Ui_MainWindow(object):
         self.timeL_label.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p>0:00:00</p></body></html>", None))
         self.current_time_label.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p><span style=\" font-size:12pt; font-weight:600;\">Current Time:</span></p></body></html>", None))
         self.timeC_label.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p>0:00:00</p></body></html>", None))
+        self.button_vot.setText(QCoreApplication.translate("MainWindow", u"Start VOT", None))
+#if QT_CONFIG(tooltip)
+        self.lineEdit_pressureInput.setToolTip(QCoreApplication.translate("MainWindow", u"<html><head/><body><p>Input the desired pressure (in mmHg) for the VOT protocol.</p><p><br/></p><p><span style=\" font-weight:600;\">MAX pressure is 240 mmHg<br/>DEFAULT pressure is 180mmHg</span></p></body></html>", None))
+#endif // QT_CONFIG(tooltip)
+        self.lineEdit_pressureInput.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Pressure [mmHg]", None))
         self.label_credits.setText("")
         self.label_version.setText(QCoreApplication.translate("MainWindow", u"v2.0.1", None))
     # retranslateUi

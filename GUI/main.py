@@ -160,6 +160,9 @@ class MainWindow(QMainWindow):
         ##CONNECTING TRIGGER BUTTON CALLBACK
         self.ui.button_trigger.clicked.connect(lambda: saveTrigger(self.time, self.diretorio))
 
+        ##CONNECTING START VOT BUTTON CALLBACK
+        self.ui.button_vot.clicked.connect(lambda: self.USBhandler.startVot(self.ui.button_vot, self.ui.lineEdit_pressureInput))
+
         ## ==> MOVE WINDOW / MAXIMIZE / RESTORE
         ########################################################################
         def moveWindow(event):
@@ -334,7 +337,8 @@ class MainWindow(QMainWindow):
         if(flag):
             #print('Getting Config')
             try:
-                cfgFile = glob.glob(self.diretorio[0] + r'/*_config*')
+                cfgFile = glob.glob(self.diretorio[0] + '\\' + r'*_config*')
+                print(cfgFile)
                 with open(cfgFile[0], 'r') as f:
                     firstLine = f.readline()
 

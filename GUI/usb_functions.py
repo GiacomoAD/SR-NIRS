@@ -23,6 +23,7 @@ class USBFunctions():
        self.vet = vetor
        self.configFlag = False
        self.configBuffer = []
+       self.votState = 1
 
     def findDevices(self):
         self.isLooking = True
@@ -39,7 +40,7 @@ class USBFunctions():
             self.signal.emit('Could not find device. Check USB connection')
             self.signal2.emit(False)
             return 0
-        self.signal.emit('\n'+ str(port) + " is connected to Serial Line.\n Waiting for START SIGNAL")
+        self.signal.emit('\n'+ str(port) + " is connected to Serial Line.\n Waiting for Bluetooth Connection!\n")
         print(port + " is connected to Serial Line")
         
         self.waitingThread = Thread(target=self.waitForBT, args=())
@@ -103,8 +104,8 @@ class USBFunctions():
     def disconnect(self):
         if(self.threadAlive):
             self.threadAlive = False
-            self.readingThread.join()
-            self.writingThread.join()
+            #self.readingThread.join()
+            #self.writingThread.join()
 
         self.ser.close()
 
@@ -236,3 +237,37 @@ class USBFunctions():
         self.ser.reset_input_buffer()
         self.signal2.emit(True)
         return
+
+
+    def startVot(self, button, pressureInput):
+        
+        pressure = pressureInput.text()
+        try:
+            pressure = int(pressure)
+            pressure = "%03d"%pressure
+            print(pressure)
+
+        except:
+            pass
+        #Start VOT 
+        if(self.votState == 1):
+            self.votState = 0
+            print(self.ser.write('#T>'.encode('utf-8')))
+            button.setStyleSheet("QPushButton:enabled { border: 2px solid rgb(35, 40, 49); border-radius: 5px;	 background-color: rgb(35, 40, 49);}"+
+            "QPushButton:hover { background-color: rgb(57, 65, 80); border: 2px solid rgb(61, 70, 86); }"+
+            "QPushButton:pressed {	background-color: rgb(35, 40, 49); border: 2px solid rgb(43, 50, 61);}"+
+            "QPushButton:disabled{ background-color: rgb(35, 40, 49); border: 2px solid rgb(43, 50, 61);}")
+            
+            
+        elif(self.votState == 0):
+            self.votState = 1
+            self.ser.write('#S>'.encode('utf-8'))
+            button.setStyleSheet("QPushButton:enabled { border: 2px solid rgb(52, 59, 72); border-radius: 5px;	 background-color: rgb(52, 59, 72);}"+
+            "QPushButton:hover { background-color: rgb(57, 65, 80); border: 2px solid rgb(61, 70, 86); }"+
+            "QPushButton:pressed {	background-color: rgb(35, 40, 49); border: 2px solid rgb(43, 50, 61);}"+
+            "QPushButton:disabled{ background-color: rgb(35, 40, 49); border: 2px solid rgb(43, 50, 61);}")
+            
+
+
+
+
