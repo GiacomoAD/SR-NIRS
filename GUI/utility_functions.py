@@ -112,9 +112,19 @@ def chPlotDisp(lineEdit_2, activeChannels):
 
                 except:
                     print('Invalid Input!')
+
+
+def displayPressure(pressVet, label):
+    try:
+        label.setText(pressVet[-1][2:-1] + ' mmHg')
+        
+    except:
+        label.setText('NaN mmHg')
+        
+
 ###################################################
         ############ END OF ############
-    ######## CONNECTION PAGE FUNCTIONS ########
+    ######## MONITORING PAGE FUNCTIONS ########
 ###################################################
 
 

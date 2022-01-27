@@ -72,6 +72,7 @@ class MainWindow(QMainWindow):
         app.aboutToQuit.connect(self.closeEvent)
 
         self.x = ["0.0;0;0;0;0;0;0\n"]
+        self.pressVet = []
 
         self.timer0 = QTimer(self)
         self.time = QTime(0,0,0)
@@ -81,7 +82,9 @@ class MainWindow(QMainWindow):
         self.timerFlag = 0
         
         
-        self.USBhandler = USBFunctions(self.diretorio, self.signal.sig_with_str, self.signal.sig_start_acq, self.signal.sig_dataPlot, self.signal.sig_getCfg, self.x)
+        self.USBhandler = USBFunctions(self.diretorio, self.signal.sig_with_str, self.signal.sig_start_acq, self.signal.sig_dataPlot, self.signal.sig_getCfg, self.x, self.pressVet,
+        self.ui.vot_frame1)
+
         #self.BThandler = BTFunctions(self.signal.sig_with_str, self.signal.sig_start_acq, self.x)
 
         

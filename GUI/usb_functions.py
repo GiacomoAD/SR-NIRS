@@ -6,8 +6,15 @@ from threading import Thread
 from datetime import datetime
 from pathlib import Path
 
+from utility_functions import displayPressure
+
+from PySide2.QtWidgets import QLabel
+
+#Ideally the same as on main_app on uC
+PACKET_SIZE = 150
+
 class USBFunctions():
-    def __init__(self, folder_path, console_signal, start_signal, plot_signal, cfg_signal, vetor):
+    def __init__(self, folder_path, console_signal, start_signal, plot_signal, cfg_signal, vetor, pressVet, votContainer):
        self.pathFolder = folder_path
        self.signal = console_signal
        self.signal2 = start_signal
@@ -23,8 +30,10 @@ class USBFunctions():
        self.vet = vetor
        self.configFlag = False
        self.configBuffer = []
+       self.pressureReadings = pressVet
        self.votState = 1
-
+       self.container = votContainer
+    
     def findDevices(self):
         self.isLooking = True
         self.lookingThread = Thread(target=self.threadedFindDevice, args=())
@@ -130,7 +139,7 @@ class USBFunctions():
 
             try:
 
-                self.bufferIn = self.ser.readlines(150)
+                self.bufferIn = self.ser.readlines(PACKET_SIZE + 1)
                 
                 for line in self.bufferIn:
                     line = line.decode('utf-8')
@@ -139,6 +148,9 @@ class USBFunctions():
                     if line[0:2] == '#C':
                         self.configFlag = True
                         self.configBuffer.append(line)
+                    elif line[0:2] == '#P':
+                        self.pressureReadings.append(line)
+                        displayPressure(self.pressureReadings, self.container.findChild(QLabel, "cPressureDisplay_label"))
                     else:
                         self.vet.append(line)
 
@@ -241,27 +253,46 @@ class USBFunctions():
 
     def startVot(self, button, pressureInput):
         
-        pressure = pressureInput.text()
-        try:
-            pressure = int(pressure)
-            pressure = "%03d"%pressure
-            print(pressure)
+        pressure = pressureInput.text()    
 
-        except:
-            pass
         #Start VOT 
         if(self.votState == 1):
             self.votState = 0
-            print(self.ser.write('#T>'.encode('utf-8')))
+            pressureInput.setDisabled(True)
+
+            try:
+                print(pressure)
+                pressure = int(pressure)
+
+                if(pressure > 240):
+                    self.signal.emit('\nMAX PRESSURE ALLOWED IS 240mmHg!\n\tVOT pressure was set to default (180mmHg)')
+                    pressure = 180
+                    pressureInput.setText('180')
+
+            except:
+                pressure = 180
+                pressureInput.setText('180')
+                self.signal.emit('\nINVALID VOT PRESSURE INPUT!\n\tVOT pressure was set to default (180mmHg)')
+
+                pass
+
+            command = "%03d"%pressure
+            command = '#T' + command + '>'
+
+            self.ser.write(command.encode('utf-8'))
+            button.setText('Stop VOT')
             button.setStyleSheet("QPushButton:enabled { border: 2px solid rgb(35, 40, 49); border-radius: 5px;	 background-color: rgb(35, 40, 49);}"+
             "QPushButton:hover { background-color: rgb(57, 65, 80); border: 2px solid rgb(61, 70, 86); }"+
             "QPushButton:pressed {	background-color: rgb(35, 40, 49); border: 2px solid rgb(43, 50, 61);}"+
             "QPushButton:disabled{ background-color: rgb(35, 40, 49); border: 2px solid rgb(43, 50, 61);}")
             
             
+            
         elif(self.votState == 0):
             self.votState = 1
             self.ser.write('#S>'.encode('utf-8'))
+            pressureInput.setDisabled(True)
+            button.setText('Start VOT')
             button.setStyleSheet("QPushButton:enabled { border: 2px solid rgb(52, 59, 72); border-radius: 5px;	 background-color: rgb(52, 59, 72);}"+
             "QPushButton:hover { background-color: rgb(57, 65, 80); border: 2px solid rgb(61, 70, 86); }"+
             "QPushButton:pressed {	background-color: rgb(35, 40, 49); border: 2px solid rgb(43, 50, 61);}"+
