@@ -18,7 +18,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(1040, 738)
+        MainWindow.resize(1300, 740)
         MainWindow.setMinimumSize(QSize(1000, 720))
         palette = QPalette()
         brush = QBrush(QColor(255, 255, 255, 255))
@@ -1428,7 +1428,7 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_15.addWidget(self.button_trigger)
 
-        self.horizontalSpacer_4 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalSpacer_4 = QSpacerItem(30, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.horizontalLayout_15.addItem(self.horizontalSpacer_4)
 
@@ -1443,7 +1443,7 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_15.addWidget(self.timeL_label, 0, Qt.AlignVCenter)
 
-        self.horizontalSpacer_5 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalSpacer_5 = QSpacerItem(30, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.horizontalLayout_15.addItem(self.horizontalSpacer_5)
 
@@ -1458,11 +1458,17 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_15.addWidget(self.timeC_label)
 
-        self.horizontalSpacer_6 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalSpacer_6 = QSpacerItem(60, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.horizontalLayout_15.addItem(self.horizontalSpacer_6)
 
-        self.button_vot = QPushButton(self.frame_13)
+        self.vot_frame3 = QFrame(self.frame_13)
+        self.vot_frame3.setObjectName(u"vot_frame3")
+        self.vot_frame3.setFrameShape(QFrame.StyledPanel)
+        self.vot_frame3.setFrameShadow(QFrame.Raised)
+        self.verticalLayout_8 = QVBoxLayout(self.vot_frame3)
+        self.verticalLayout_8.setObjectName(u"verticalLayout_8")
+        self.button_vot = QPushButton(self.vot_frame3)
         self.button_vot.setObjectName(u"button_vot")
         self.button_vot.setMinimumSize(QSize(120, 30))
         self.button_vot.setFont(font8)
@@ -1484,9 +1490,24 @@ class Ui_MainWindow(object):
 "	border: 2px solid rgb(43, 50, 61);\n"
 "}")
 
-        self.horizontalLayout_15.addWidget(self.button_vot)
+        self.verticalLayout_8.addWidget(self.button_vot)
 
-        self.lineEdit_pressureInput = QLineEdit(self.frame_13)
+
+        self.horizontalLayout_15.addWidget(self.vot_frame3)
+
+        self.vot_frame2 = QFrame(self.frame_13)
+        self.vot_frame2.setObjectName(u"vot_frame2")
+        self.vot_frame2.setFrameShape(QFrame.StyledPanel)
+        self.vot_frame2.setFrameShadow(QFrame.Raised)
+        self.verticalLayout_7 = QVBoxLayout(self.vot_frame2)
+        self.verticalLayout_7.setObjectName(u"verticalLayout_7")
+        self.votPressure_label = QLabel(self.vot_frame2)
+        self.votPressure_label.setObjectName(u"votPressure_label")
+        self.votPressure_label.setAlignment(Qt.AlignCenter)
+
+        self.verticalLayout_7.addWidget(self.votPressure_label)
+
+        self.lineEdit_pressureInput = QLineEdit(self.vot_frame2)
         self.lineEdit_pressureInput.setObjectName(u"lineEdit_pressureInput")
         self.lineEdit_pressureInput.setMinimumSize(QSize(0, 0))
         self.lineEdit_pressureInput.setMaximumSize(QSize(16777215, 25))
@@ -1502,11 +1523,36 @@ class Ui_MainWindow(object):
 "QLineEdit:focus {\n"
 "	border: 2px solid rgb(91, 101, 124);\n"
 "}")
+        self.lineEdit_pressureInput.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignVCenter)
 
-        self.horizontalLayout_15.addWidget(self.lineEdit_pressureInput)
+        self.verticalLayout_7.addWidget(self.lineEdit_pressureInput)
 
 
-        self.gridLayout_7.addWidget(self.frame_13, 0, 0, 1, 1, Qt.AlignHCenter)
+        self.horizontalLayout_15.addWidget(self.vot_frame2)
+
+        self.vot_frame1 = QFrame(self.frame_13)
+        self.vot_frame1.setObjectName(u"vot_frame1")
+        self.vot_frame1.setFrameShape(QFrame.StyledPanel)
+        self.vot_frame1.setFrameShadow(QFrame.Raised)
+        self.verticalLayout_6 = QVBoxLayout(self.vot_frame1)
+        self.verticalLayout_6.setObjectName(u"verticalLayout_6")
+        self.cPressure_label = QLabel(self.vot_frame1)
+        self.cPressure_label.setObjectName(u"cPressure_label")
+        self.cPressure_label.setAlignment(Qt.AlignCenter)
+
+        self.verticalLayout_6.addWidget(self.cPressure_label)
+
+        self.cPressureDisplay_label = QLabel(self.vot_frame1)
+        self.cPressureDisplay_label.setObjectName(u"cPressureDisplay_label")
+        self.cPressureDisplay_label.setAlignment(Qt.AlignCenter)
+
+        self.verticalLayout_6.addWidget(self.cPressureDisplay_label)
+
+
+        self.horizontalLayout_15.addWidget(self.vot_frame1)
+
+
+        self.gridLayout_7.addWidget(self.frame_13, 0, 0, 1, 1)
 
 
         self.gridLayout_6.addWidget(self.frame_7, 0, 0, 1, 1)
@@ -1619,7 +1665,7 @@ class Ui_MainWindow(object):
         self.btn_close.setText("")
         self.label_top_info_1.setText(QCoreApplication.translate("MainWindow", u"FFNIRS Experimental GUI", None))
         self.label_top_info_2.setText(QCoreApplication.translate("MainWindow", u"| HOME", None))
-        self.label_user_icon.setText(QCoreApplication.translate("MainWindow", u"WM", None))
+        self.label_user_icon.setText(QCoreApplication.translate("MainWindow", u"GD", None))
         self.label_6.setText(QCoreApplication.translate("MainWindow", u"NIRS GUI", None))
         self.label.setText(QCoreApplication.translate("MainWindow", u"Version 0.0.1", None))
         self.label_7.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p align=\"center\"><span style=\" font-size:8pt;\">Base layout by: Wanderson M. Pimenta</span></p></body></html>", None))
@@ -1656,10 +1702,13 @@ class Ui_MainWindow(object):
         self.current_time_label.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p><span style=\" font-size:12pt; font-weight:600;\">Current Time:</span></p></body></html>", None))
         self.timeC_label.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p>0:00:00</p></body></html>", None))
         self.button_vot.setText(QCoreApplication.translate("MainWindow", u"Start VOT", None))
+        self.votPressure_label.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p><span style=\" font-size:10pt; font-weight:600;\">VOT Pressure</span></p></body></html>", None))
 #if QT_CONFIG(tooltip)
         self.lineEdit_pressureInput.setToolTip(QCoreApplication.translate("MainWindow", u"<html><head/><body><p>Input the desired pressure (in mmHg) for the VOT protocol.</p><p><br/></p><p><span style=\" font-weight:600;\">MAX pressure is 240 mmHg<br/>DEFAULT pressure is 180mmHg</span></p></body></html>", None))
 #endif // QT_CONFIG(tooltip)
-        self.lineEdit_pressureInput.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Pressure [mmHg]", None))
+        self.lineEdit_pressureInput.setPlaceholderText(QCoreApplication.translate("MainWindow", u"P [mmHg]", None))
+        self.cPressure_label.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p><span style=\" font-size:10pt; font-weight:600;\">Current Pressure</span></p></body></html>", None))
+        self.cPressureDisplay_label.setText("")
         self.label_credits.setText("")
         self.label_version.setText(QCoreApplication.translate("MainWindow", u"v2.0.1", None))
     # retranslateUi
