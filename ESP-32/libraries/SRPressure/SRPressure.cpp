@@ -3,7 +3,7 @@
 /* File description: Automated Sphygmomanometer handler header file  */
 /* Author name:      Giacomo Dollevedo                               */
 /* Creation date:    28nov2021                                       */
-/* Revision date:    19jan2022                                       */
+/* Revision date:    27jan2022                                       */
 /* ***************************************************************** */
 
 #include "SRPressure.h"
@@ -66,6 +66,10 @@ int SRPressure::convertPressure()
 /* ************************************************************************************ */
 int SRPressure::getPressure()
 {
+	if (lastReading_kPa < 0)
+	{
+		return 0;
+	}
 	return lastReading_kPa;
 }
 
@@ -80,6 +84,10 @@ int SRPressure::getPressure()
 int SRPressure::getPressuremmHg()
 {
 	convertPressure();
+	if (lastReading_mmhg < 0)
+	{
+		return 0;
+	}
 	return lastReading_mmhg;
 }
 
