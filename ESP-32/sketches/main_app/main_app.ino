@@ -217,6 +217,7 @@ void loop()
 
     /* If the packet ready to send */
     if(packets == PACKET_SIZE){
+      sprintf(message_packet, "%s#P%03d\n\0", message_packet, NIRSpressure.getPressuremmHg());
       packet_ready = 1; // Flipping flag to send packets
       packets = 0;      // Resetting # of lines written
     }
@@ -363,18 +364,24 @@ double getTimestamp(){
 /* ************************************************************************************ */
 // TESTING
 void processCommand(char* bufferIn){
+
+  unsigned char pressure = 0;
+  
   if(bufferIn[0] == '\0')
     return;
   
   else if(bufferIn[0] == '#'){
     switch(bufferIn[1]){
       case 'T':
+        pressure = (100*(bufferIn[2]-48) + 10*(bufferIn[3]-48) + (bufferIn[4]-48));
+        NIRSpressure.setPressureCap(pressure);
         NIRSpressure.setVotState(1);
         VOT_flag = 1;
         NIRSBt.clearBuffer();
         return;
       case 'S':
         VOT_flag = 0;
+        NIRSBt.clearBuffer();
         return;
     }
   }
