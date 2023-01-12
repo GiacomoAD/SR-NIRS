@@ -1,5 +1,5 @@
 # SR-NIRS
-> Ongoing Project - Started on Jan/2021
+> Started on Jan/2021
 
 SR-NIRS is a project to develop a low cost, portable, Spatially Resolved Near-Infrared Spectroscopy embedded system. Currently, the project is based on ESP-32 microcontroller.
 
